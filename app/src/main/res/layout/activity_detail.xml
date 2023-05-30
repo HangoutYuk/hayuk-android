@@ -7,6 +7,19 @@
     android:orientation="horizontal"
     tools:context=".ui.detail.DetailActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="3dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +30,31 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="32dp">
+            android:layout_marginBottom="32dp">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:clickable="true"
+                android:elevation="2dp"
+                android:src="@drawable/ic_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_fav"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:clickable="true"
+                android:elevation="2dp"
+                android:src="@drawable/ic_favorite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/iv_detail_photo"
@@ -31,18 +68,18 @@
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:backgroundTint="@color/design_default_color_surface"
-                android:textColor="@color/md_theme_light_primary"
-                app:iconTint="@color/md_theme_light_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="-32dp"
+                android:backgroundTint="@color/design_default_color_surface"
                 android:contentDescription="vote"
                 android:text="Maps"
+                android:textColor="@color/md_theme_light_primary"
                 android:translationZ="10dp"
                 app:elevation="2dp"
                 app:icon="@drawable/ic_map"
+                app:iconTint="@color/md_theme_light_primary"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_detail_photo"
                 app:layout_constraintEnd_toEndOf="@+id/iv_detail_photo" />
 
@@ -73,17 +110,17 @@
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Jl. Malioboro No.41, Sosromenduran, Gedong Tengen, Kota Yogyakarta, Daerah Istimewa Yogyakarta"
+                android:text="Alamat tempat, Sosromenduran, Gedong Tengen, Kota Yogyakarta, Daerah Istimewa Yogyakarta"
                 app:layout_constraintStart_toStartOf="@+id/tv_detail_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail_name" />
 
             <TextView
-                android:id="@+id/tv_detail_rating"
+                android:id="@+id/tv_detail_ratingTotalReview"
                 style="@style/TextAppearance.Material3.LabelSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="4.5 (96.9K)"
+                android:text="rating total review"
                 app:layout_constraintStart_toStartOf="@+id/tv_detail_address"
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail_address" />
 
@@ -132,7 +169,7 @@
                 app:dividerInsetStart="28dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_detail_rating" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_ratingTotalReview" />
 
             <TextView
                 android:id="@+id/tv_about"
@@ -152,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="32dp"
-                android:text="Seattle-based coffeehouse chain known for its signature roasts, light bites and WiFi availability."
+                android:text="about description of the place"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_about"
                 app:layout_constraintTop_toBottomOf="@+id/tv_about" />
@@ -262,10 +299,12 @@
                 android:id="@+id/cv_web"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
+                android:layout_marginBottom="32dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/cv_phone"
                 app:layout_constraintTop_toBottomOf="@+id/cv_phone">
@@ -295,7 +334,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="phone"
+                        android:text="website"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageView_web"
                         app:layout_constraintTop_toTopOf="parent" />

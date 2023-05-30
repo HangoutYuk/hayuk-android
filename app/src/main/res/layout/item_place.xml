@@ -5,7 +5,8 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginHorizontal="2dp"
+    android:layout_marginBottom="16dp"
     android:contentDescription="card_item"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp">
@@ -17,6 +18,7 @@
 
         <!-- Media -->
         <ImageView
+            android:id="@+id/item_image"
             android:layout_width="match_parent"
             android:layout_height="194dp"
             android:contentDescription="content_description_media"
@@ -64,19 +66,19 @@
                 android:id="@+id/imageView_star"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/ic_stared"
                 android:layout_marginEnd="4dp"
-                app:tint="@color/md_theme_light_secondaryContainer"
+                android:src="@drawable/ic_stared"
                 app:layout_constraintBottom_toBottomOf="@+id/item_totalReview"
                 app:layout_constraintEnd_toStartOf="@+id/item_totalReview"
-                app:layout_constraintTop_toTopOf="@+id/item_totalReview" />
+                app:layout_constraintTop_toTopOf="@+id/item_totalReview"
+                app:tint="@color/md_theme_light_secondaryContainer" />
 
             <TextView
                 android:id="@+id/item_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4.5"
                 android:layout_marginEnd="4dp"
+                android:text="4.5"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toStartOf="@+id/imageView_star"

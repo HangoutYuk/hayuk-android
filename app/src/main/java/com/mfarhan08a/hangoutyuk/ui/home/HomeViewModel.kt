@@ -1,13 +1,19 @@
 package com.mfarhan08a.hangoutyuk.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.mfarhan08a.hangoutyuk.data.AppRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val repository: AppRepository) : ViewModel() {
+    fun getToken() = repository.getToken().asLiveData(Dispatchers.IO)
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    fun clearToken() {
+        viewModelScope.launch {
+            repository.clearToken()
+        }
     }
-    val text: LiveData<String> = _text
+
+    fun getAllStories() = repository.getAllPlaces()
+
 }
