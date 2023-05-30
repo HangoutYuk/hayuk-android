@@ -46,6 +46,9 @@ class HomeFragment : Fragment() {
         homeViewModel.getToken().observe(requireActivity()) { token ->
             if (token != null) {
                 Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
             }
         }
 
