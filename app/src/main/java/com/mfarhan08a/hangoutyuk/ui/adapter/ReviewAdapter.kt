@@ -14,8 +14,8 @@ class ReviewAdapter(private val listReview: List<Review>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(review: Review) {
-            binding.itemUsername.text = review.username
-            binding.itemReview.text = review.reviewDetail
+            binding.itemUsername.text = review.author
+            binding.itemReview.text = review.text
             binding.itemRating.text = review.rating.toString()
         }
     }

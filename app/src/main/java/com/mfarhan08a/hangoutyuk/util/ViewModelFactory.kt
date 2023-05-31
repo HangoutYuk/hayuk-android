@@ -8,6 +8,7 @@ import com.mfarhan08a.hangoutyuk.di.Injection
 import com.mfarhan08a.hangoutyuk.ui.detail.DetailViewModel
 import com.mfarhan08a.hangoutyuk.ui.home.HomeViewModel
 import com.mfarhan08a.hangoutyuk.ui.login.LoginViewModel
+import com.mfarhan08a.hangoutyuk.ui.profile.ProfileViewModel
 import com.mfarhan08a.hangoutyuk.ui.register.RegisterViewModel
 
 class ViewModelFactory private constructor(
@@ -21,6 +22,7 @@ class ViewModelFactory private constructor(
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> return DetailViewModel(repository) as T
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> return RegisterViewModel(repository) as T
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> return LoginViewModel(repository) as T
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> return ProfileViewModel(repository) as T
 //            modelClass.isAssignableFrom(PostViewModel::class.java) -> return PostViewModel(repository) as T
 //            modelClass.isAssignableFrom(SettingsViewModel::class.java) -> return SettingsViewModel(repository) as T
 //            modelClass.isAssignableFrom(MapsViewModel::class.java) -> return MapsViewModel(repository) as T

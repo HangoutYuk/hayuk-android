@@ -5,17 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mfarhan08a.hangoutyuk.databinding.FragmentHomeBinding
-import com.mfarhan08a.hangoutyuk.ui.profile.ProfileActivity
 import com.mfarhan08a.hangoutyuk.data.Result
 import com.mfarhan08a.hangoutyuk.data.model.Place
+import com.mfarhan08a.hangoutyuk.databinding.FragmentHomeBinding
 import com.mfarhan08a.hangoutyuk.ui.adapter.PlaceAdapter
 import com.mfarhan08a.hangoutyuk.ui.detail.DetailActivity
 import com.mfarhan08a.hangoutyuk.ui.login.LoginActivity
+import com.mfarhan08a.hangoutyuk.ui.onboarding.OnboardingActivity
+import com.mfarhan08a.hangoutyuk.ui.profile.ProfileActivity
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
 
 class HomeFragment : Fragment() {
@@ -44,25 +44,30 @@ class HomeFragment : Fragment() {
         binding.recyclerViewPlace.layoutManager = layoutManager
 
         homeViewModel.getToken().observe(requireActivity()) { token ->
+            homeViewModel.getAllPlaces()
+                .observe(requireActivity()) {
+                    when (it) {
+                        is Result.Success -> {
+                            setPlacesData(it.data)
+                            showLoading(false)
+                        }
+                        is Result.Error -> {
+                            showLoading(false)
+                        }
+                        is Result.Loading -> {
+                            showLoading(true)
+                        }
+                    }
+                }
             if (token != null) {
-//                Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
             }
         }
 
-        homeViewModel.getAllStories().observe(requireActivity()) {
-            when (it) {
-                is Result.Success -> {
-                    setPlacesData(it.data)
-                    showLoading(false)
-                }
-                is Result.Error -> {
-                    showLoading(false)
-                }
-                is Result.Loading -> {
-                    showLoading(true)
-                }
-            }
+        homeViewModel.getName().observe(requireActivity()) { name ->
+            binding.textViewName.text = name
         }
+
+
 
         binding.fabMaps.setOnClickListener {
             navigateToMaps()
@@ -92,7 +97,7 @@ class HomeFragment : Fragment() {
         adapter.setOnItemClickCallBack(object : PlaceAdapter.OnItemClickCallback {
             override fun onItemClicked(place: Place) {
                 val intent = Intent(requireContext(), DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_ID, place.id)
+                intent.putExtra(DetailActivity.EXTRA_PLACE, place)
                 startActivity(intent)
             }
         })
@@ -104,8 +109,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun navigateToMaps() {
-        val intent = Intent(activity, DetailActivity::class.java)
+        val intent = Intent(activity, OnboardingActivity::class.java)
         startActivity(intent)
+
+//        val gmmIntentUri = Uri.parse("https://goo.gl/maps/YHLp6p7tV72iyZs1A")
+//        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+//        startActivity(mapIntent)
+
     }
 
     override fun onDestroyView() {

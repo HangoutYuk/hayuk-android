@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mfarhan08a.hangoutyuk.data.model.Place
 import com.mfarhan08a.hangoutyuk.databinding.ItemPlaceBinding
+import com.mfarhan08a.hangoutyuk.util.Formater
 
 class PlaceAdapter(private val listPlace: List<Place>) :
     RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() {
@@ -23,17 +24,18 @@ class PlaceAdapter(private val listPlace: List<Place>) :
         this.onItemClickCallback = onItemClickCallback
     }
 
-    class PlaceViewHolder(private val binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root) {
+    class PlaceViewHolder(private val binding: ItemPlaceBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(place: Place) {
             Glide.with(itemView.context)
-                .load(place.photoUrl)
+                .load(place.photo)
                 .into(binding.itemImage)
             binding.itemName.text = place.name
             binding.itemCategory.text = place.category
             binding.itemRating.text = place.rating.toString()
-            binding.itemTotalReview.text = place.totalReview.toString()
-            binding.itemDistance.text = place.distance.toString()
+            binding.itemTotalReview.text = Formater.totalReviewFormat(place.totalReview)
+            binding.itemDistance.text = "sabar ges"
         }
 
     }

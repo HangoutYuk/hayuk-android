@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: AppRepository) : ViewModel() {
     fun getToken() = repository.getToken().asLiveData(Dispatchers.IO)
+    fun getName() = repository.getName().asLiveData(Dispatchers.IO)
 
     fun clearToken() {
         viewModelScope.launch {
@@ -14,6 +15,7 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
         }
     }
 
-    fun getAllStories() = repository.getAllPlaces()
+//    fun getAllPlaces(token: String, location: String) = repository.getAllPlaces(token, location)
+    fun getAllPlaces() = repository.getAllPlaces()
 
 }

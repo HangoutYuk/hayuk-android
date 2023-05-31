@@ -1,6 +1,7 @@
 package com.mfarhan08a.hangoutyuk.data.model
 
 
+/*
 data class Place(
     val id: Int,
     val distance: Double,
@@ -24,4 +25,4 @@ data class Review(
     val rating: Double,
     val username: String,
     val reviewDetail: String,
-)
+)*/

@@ -40,6 +40,9 @@ class LoginActivity : AppCompatActivity() {
             btnLogin.setOnClickListener {
                 login()
             }
+            imageView.setOnClickListener {
+                navigateToMain()
+            }
         }
     }
 
