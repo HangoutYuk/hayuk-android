@@ -1,16 +1,14 @@
 package com.mfarhan08a.hangoutyuk.ui.register
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.mfarhan08a.hangoutyuk.R
-import com.mfarhan08a.hangoutyuk.databinding.ActivityLoginBinding
-import com.mfarhan08a.hangoutyuk.databinding.ActivityRegisterBinding
 import com.mfarhan08a.hangoutyuk.data.Result
+import com.mfarhan08a.hangoutyuk.databinding.ActivityRegisterBinding
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
 
 class RegisterActivity : AppCompatActivity() {

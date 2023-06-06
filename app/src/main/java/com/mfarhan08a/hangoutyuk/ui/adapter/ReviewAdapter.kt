@@ -16,6 +16,7 @@ class ReviewAdapter(private val listReview: List<Review>) :
         fun bind(review: Review) {
             binding.itemUsername.text = review.author
             binding.itemReview.text = review.text
+            binding.itemTime.text = review.time
             binding.itemRating.text = review.rating.toString()
         }
     }

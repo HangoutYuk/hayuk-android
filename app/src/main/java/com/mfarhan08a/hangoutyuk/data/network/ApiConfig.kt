@@ -20,7 +20,7 @@ class ApiConfig {
                 .addInterceptor(loggingInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://backend-dev-dot-curious-furnace-381420.uc.r.appspot.com/v1/")
+                .baseUrl("https://hayuk-project.et.r.appspot.com/v1/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="2dp"
     android:layout_marginBottom="16dp"
-    android:contentDescription="card_item"
+    android:contentDescription="@string/card_places"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp">
 
@@ -21,7 +21,7 @@
             android:id="@+id/item_image"
             android:layout_width="match_parent"
             android:layout_height="194dp"
-            android:contentDescription="content_description_media"
+            android:contentDescription="@string/places_photo"
             android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
@@ -36,8 +36,8 @@
                 android:id="@+id/item_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="PlaceName"
                 android:layout_marginEnd="28dp"
+                android:text="@string/place_name"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 app:layout_constraintEnd_toStartOf="@+id/item_rating"
                 app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Categories"
+                android:text="@string/categories"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintStart_toStartOf="@+id/item_name"
@@ -58,7 +58,7 @@
                 android:id="@+id/item_totalReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(96.9k)"
+                android:text="@string/ex_total_review"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -73,14 +73,15 @@
                 app:layout_constraintBottom_toBottomOf="@+id/item_totalReview"
                 app:layout_constraintEnd_toStartOf="@+id/item_totalReview"
                 app:layout_constraintTop_toTopOf="@+id/item_totalReview"
-                app:tint="@color/md_theme_light_secondaryContainer" />
+                app:tint="@color/md_theme_light_secondaryContainer"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/item_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                android:text="4.5"
+                android:text="@string/ex_rating"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toStartOf="@+id/imageView_star"
@@ -91,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="3.2 km away"
+                android:text="@string/ex_distance"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -72,6 +72,7 @@
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/fab_maps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
@@ -131,6 +132,19 @@
                 android:text="@string/rating_totalreview"
                 app:layout_constraintStart_toStartOf="@+id/tv_detail_address"
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail_address" />
+
+            <ImageView
+                android:id="@+id/imageView_star"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="@string/rating"
+                android:src="@drawable/ic_stared"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_detail_ratingTotalReview"
+                app:layout_constraintStart_toEndOf="@+id/tv_detail_ratingTotalReview"
+                app:layout_constraintTop_toTopOf="@+id/tv_detail_ratingTotalReview"
+                app:tint="@color/md_theme_light_secondaryContainer"
+                tools:ignore="ImageContrastCheck" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/div2"
@@ -233,7 +247,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_review"
                 app:layout_constraintTop_toBottomOf="@+id/tv_review"
-                tools:itemCount="3"
+                app:layout_constraintBottom_toTopOf="@+id/div4"
+                tools:itemCount="5"
                 tools:listitem="@layout/item_review" />
 
             <com.google.android.material.divider.MaterialDivider

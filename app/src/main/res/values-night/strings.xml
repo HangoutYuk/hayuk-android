@@ -40,4 +40,25 @@
     <string name="phone">Phone</string>
     <string name="website">Website</string>
     <string name="vote">Vote</string>
+    <string name="card_review">card review item</string>
+    <string name="time">Time</string>
+    <string name="review_detail">Seattle-based coffeehouse chain known for its signature roasts, light bites and WiFi availability.</string>
+    <string name="rating">Rating</string>
+    <string name="location_not_found">Can\'t get your location</string>
+    <string name="error_maps">Error loading maps</string>
+    <string name="style_failed">Style parsing failed.</string>
+    <string name="add_image">Add Image</string>
+    <string name="no_picture">No Picture</string>
+    <string name="loading">Please wait..</string>
+    <string name="post_succed">Profile Updated</string>
+    <string name="post_failed">Save failed</string>
+    <string name="choose_picture">Choose picture</string>
+    <string name="input_new_password">Input new password</string>
+    <string name="illustration">Illustration</string>
+    <string name="favorite_places">Favorite Places</string>
+    <string name="card_places">Card Places</string>
+    <string name="ex_rating">4.5</string>
+    <string name="ex_distance">3.2 km away</string>
+    <string name="time_icon">Time icon</string>
+    <string name="delete_account">Delete Account</string>
 </resources>

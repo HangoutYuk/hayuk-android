@@ -36,7 +36,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:srcCompat="@drawable/login" />
+        app:srcCompat="@drawable/login"
+        android:contentDescription="@string/illustration" />
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -90,7 +91,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textEmailAddress"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -114,7 +115,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -127,7 +128,8 @@
         android:text="@string/title_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
         android:id="@+id/tv_yet"
@@ -138,7 +140,8 @@
         android:text="@string/havent_account"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_register"
-        app:layout_constraintTop_toTopOf="@+id/btn_register" />
+        app:layout_constraintTop_toTopOf="@+id/btn_register"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/btn_register"
@@ -149,7 +152,8 @@
         android:layout_marginEnd="32dp"
         android:text="@string/register_here"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_login"
+        tools:ignore="TextSizeCheck,TextContrastCheck" />
 
     <TextView
         android:id="@+id/copyrightTextView"
@@ -162,6 +166,7 @@
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="SmallSp,TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

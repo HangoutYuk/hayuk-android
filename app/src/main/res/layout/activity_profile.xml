@@ -49,23 +49,28 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <ImageView
+            android:id="@+id/iv_photoProfile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:contentDescription="@string/profile_image"
             tools:ignore="ImageContrastCheck"
             tools:src="@tools:sample/avatars" />
     </androidx.cardview.widget.CardView>
 
     <ImageButton
+        android:id="@+id/btn_addPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/transparent"
         android:elevation="3dp"
         android:outlineAmbientShadowColor="@android:color/transparent"
         android:outlineSpotShadowColor="@android:color/transparent"
+        android:contentDescription="@string/add_image"
         android:src="@drawable/ic_add_photo"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="@+id/cardView" />
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        tools:ignore="UnusedAttribute" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -157,6 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="@string/input_new_password"
             android:inputType="textPassword"
             tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -169,9 +175,22 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         android:text="@string/save"
+        android:drawableStart="@drawable/ic_favorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout" />
 
+    <Button
+        android:id="@+id/btn_delete"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/delete_account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_save" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,18 @@
 package com.mfarhan08a.hangoutyuk.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.mfarhan08a.hangoutyuk.data.model.Place
 import com.mfarhan08a.hangoutyuk.databinding.ActivityDetailBinding
 import com.mfarhan08a.hangoutyuk.ui.adapter.ReviewAdapter
+import com.mfarhan08a.hangoutyuk.ui.adapter.ScheduleAdapter
 import com.mfarhan08a.hangoutyuk.util.Formater
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
 
@@ -30,29 +33,19 @@ class DetailActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvReview.layoutManager = layoutManager
 
+        showLoading(true)
         val place = if (Build.VERSION.SDK_INT >= 33) {
-            intent.getParcelableExtra(EXTRA_PLACE, Place::class.java)
+            intent.getParcelableExtra(EXTRA_PLACE, Place::class.java)!!
         } else {
             @Suppress("DEPRECATION")
-            intent.getParcelableExtra(EXTRA_PLACE)
+            intent.getParcelableExtra(EXTRA_PLACE)!!
         }
-        showDetail(place!!)
-
-
-//        detailViewModel.getDetailPlace(id).observe(this) {
-//            when (it) {
-//                is Result.Loading -> {
-//                    showLoading(true)
-//                }
-//                is Result.Success -> {
-//                    showLoading(false)
-//                    showDetail(it.data)
-//                }
-//                is Result.Error -> {
-//                    showLoading(false)
-//                }
-//            }
-//        }
+        if (place != null) {
+            showDetail(place)
+        } else {
+            finish()
+        }
+        showLoading(false)
 
         binding.apply {
             btnBack.setOnClickListener {
@@ -63,11 +56,11 @@ class DetailActivity : AppCompatActivity() {
 
     private fun showDetail(data: Place) {
         data.apply {
-            showAbout(about)
-            showSchedule(emptyList())
-            showContact(phone, website)
+            showAbout(about!!)
+            showSchedule(data.schedule!!)
+            showContact(phone!!, website!!)
             binding.apply {
-                val adapterReview = ReviewAdapter(review.take(3))
+                val adapterReview = ReviewAdapter(review)
                 rvReview.adapter = adapterReview
                 Glide.with(this@DetailActivity)
                     .load(photo)
@@ -79,6 +72,11 @@ class DetailActivity : AppCompatActivity() {
                 tvContactWeb.text = website
                 tvDetailRatingTotalReview.text =
                     "$rating (${Formater.totalReviewFormat(totalReview)})"
+                fabMaps.setOnClickListener {
+                    val mapUrl = Uri.parse(mapsURL)
+                    val mapIntent = Intent(Intent.ACTION_VIEW, mapUrl)
+                    startActivity(mapIntent)
+                }
             }
         }
 
@@ -120,10 +118,12 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSchedule(schedule: List<String>) {
+    private fun showSchedule(schedule: List<List<String>>) {
+        val sch = schedule[0]
         binding.apply {
-            if (!schedule.isNullOrEmpty()) {
-
+            if (sch[0] != "null") {
+                val scheduleAdapter = ScheduleAdapter(sch)
+                binding.rvSchedule.adapter = scheduleAdapter
             } else {
                 tvSchedule.visibility = View.GONE
                 rvSchedule.visibility = View.GONE

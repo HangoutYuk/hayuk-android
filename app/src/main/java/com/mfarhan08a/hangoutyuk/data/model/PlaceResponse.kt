@@ -23,7 +23,7 @@ data class Review(
     val author: String,
 
     @field:SerializedName("rating")
-    val rating: Double,
+    val rating: Int,
 
     @field:SerializedName("id")
     val id: String,
@@ -39,10 +39,10 @@ data class Review(
 data class Place(
 
     @field:SerializedName("website")
-    val website: String,
+    val website: String? = null,
 
     @field:SerializedName("address")
-    val address: String,
+    val address: String? = null,
 
     @field:SerializedName("latitude")
     val latitude: Double,
@@ -51,13 +51,16 @@ data class Place(
     val rating: Double,
 
     @field:SerializedName("about")
-    val about: String,
+    val about: String? = null,
 
     @field:SerializedName("photo")
     val photo: String,
 
+    @field:SerializedName("schedule")
+    val schedule: List<List<String>>? = null,
+
     @field:SerializedName("phone")
-    val phone: String,
+    val phone: String? = null,
 
     @field:SerializedName("review")
     val review: List<Review>,
@@ -76,4 +79,8 @@ data class Place(
 
     @field:SerializedName("longitude")
     val longitude: Double,
+
+    @field:SerializedName("mapsURL")
+    val mapsURL: String,
+
 ) : Parcelable

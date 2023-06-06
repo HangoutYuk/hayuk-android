@@ -1,14 +1,10 @@
 package com.mfarhan08a.hangoutyuk.data.network
 
-import com.mfarhan08a.hangoutyuk.data.model.LoginResponse
-import com.mfarhan08a.hangoutyuk.data.model.PlaceResponse
-import com.mfarhan08a.hangoutyuk.data.model.RegisterResponse
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.Path
+import com.mfarhan08a.hangoutyuk.data.model.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.*
+
 
 interface ApiService {
 
@@ -32,17 +28,38 @@ interface ApiService {
         @Body body: String?
     ): LoginResponse
 
+    @Headers("Content-Type: application/json")
+    @DELETE("user/{id}")
+    suspend fun deleteUser(
+        @Header("auth-token") token: String,
+        @Path("id") id: String,
+    ): UpdateResponse
+
     @GET("ml-endpoint/{location}")
     suspend fun getPlacesRecomendation(
         @Header("auth-token") token: String,
-        @Path("location") id: String,
+        @Path("location") location: String,
     ): PlaceResponse
 
     @GET("user/{id}")
     suspend fun getUserbyId(
         @Header("auth-token") token: String,
         @Path("id") id: String,
-    ): RegisterResponse
+    ): UserResponse
 
+    @Multipart
+    @POST("user/{id}")
+    suspend fun postPhotoProfile(
+        @Header("auth-token") token: String,
+        @Path("id") id: String,
+        @Part photoFile: MultipartBody.Part,
+    ): PhotoResponse
 
+    @Headers("Content-Type: application/json")
+    @PATCH("user/{id}")
+    suspend fun updateProfile(
+        @Header("auth-token") token: String,
+        @Path("id") id: String,
+        @Body body: String?,
+    ) : UpdateResponse
 }
