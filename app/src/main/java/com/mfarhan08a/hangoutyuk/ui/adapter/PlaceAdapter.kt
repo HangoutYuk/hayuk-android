@@ -1,23 +1,21 @@
 package com.mfarhan08a.hangoutyuk.ui.adapter
 
+import android.location.Location
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mfarhan08a.hangoutyuk.data.model.Place
+import com.mfarhan08a.hangoutyuk.data.model.PlaceItem
 import com.mfarhan08a.hangoutyuk.databinding.ItemPlaceBinding
 import com.mfarhan08a.hangoutyuk.util.Formater
 
-class PlaceAdapter(private val listPlace: List<Place>) :
+class PlaceAdapter(private val listPlace: List<PlaceItem>, private val userLocation: Location) :
     RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     interface OnItemClickCallback {
-        fun onItemClicked(
-            place: Place,
-//            optionsCompat: ActivityOptionsCompat
-        )
+        fun onItemClicked(place: PlaceItem)
     }
 
     fun setOnItemClickCallBack(onItemClickCallback: OnItemClickCallback) {
@@ -27,7 +25,7 @@ class PlaceAdapter(private val listPlace: List<Place>) :
     class PlaceViewHolder(private val binding: ItemPlaceBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(place: Place) {
+        fun bind(place: PlaceItem, userLocation: Location) {
             Glide.with(itemView.context)
                 .load(place.photo)
                 .into(binding.itemImage)
@@ -35,7 +33,8 @@ class PlaceAdapter(private val listPlace: List<Place>) :
             binding.itemCategory.text = place.category
             binding.itemRating.text = place.rating.toString()
             binding.itemTotalReview.text = Formater.totalReviewFormat(place.totalReview)
-            binding.itemDistance.text = "sabar ges"
+            val latlng = "${place.latitude},${place.longitude}"
+            binding.itemDistance.text = userLocation.distanceTo(Location(latlng)).toDouble().toString()
         }
 
     }
@@ -52,18 +51,10 @@ class PlaceAdapter(private val listPlace: List<Place>) :
         holder: PlaceViewHolder,
         position: Int
     ) {
-        holder.bind(listPlace[position])
+        holder.bind(listPlace[position], userLocation)
         holder.itemView.setOnClickListener {
-//            val optionsCompat: ActivityOptionsCompat =
-//                ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                    holder.itemView.context as Activity,
-//                    Pair(holder.ivPhoto, "photo"),
-//                    Pair(holder.tvName, "name"),
-//                    Pair(holder.tvDescription, "description")
-//                )
             onItemClickCallback.onItemClicked(
-                listPlace[holder.adapterPosition],
-//                optionsCompat
+                listPlace[holder.adapterPosition]
             )
         }
 

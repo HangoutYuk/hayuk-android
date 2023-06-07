@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mfarhan08a.hangoutyuk.data.model.Review
 import com.mfarhan08a.hangoutyuk.databinding.ItemReviewBinding
 
-class ReviewAdapter(private val listReview: List<Review>) :
+class ReviewAdapter(private val listReview: List<Review?>) :
     RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
 
@@ -33,7 +33,7 @@ class ReviewAdapter(private val listReview: List<Review>) :
         holder: ReviewViewHolder,
         position: Int
     ) {
-        holder.bind(listReview[position])
+        holder.bind(listReview[position]!!)
     }
 
     override fun getItemCount(): Int = listReview.size

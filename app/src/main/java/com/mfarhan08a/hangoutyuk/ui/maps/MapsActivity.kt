@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mfarhan08a.hangoutyuk.R
 import com.mfarhan08a.hangoutyuk.data.Result
-import com.mfarhan08a.hangoutyuk.data.model.Place
+import com.mfarhan08a.hangoutyuk.data.model.PlaceItem
 import com.mfarhan08a.hangoutyuk.databinding.ActivityMapsBinding
 import com.mfarhan08a.hangoutyuk.ui.detail.DetailActivity
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
@@ -70,7 +70,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mapsViewModel.getToken().observe(this) { token ->
             if (token != null) {
-                mapsViewModel.getAllPlaces(token, location).observe(this) { result ->
+                mapsViewModel.getPlaceRecomendation(token, location).observe(this) { result ->
                     when (result) {
                         is Result.Loading -> {
                             showLoading(true)
@@ -95,17 +95,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setMapStyle()
     }
 
-    private fun navigateToDetail(position: LatLng, data: List<Place>) {
+    private fun navigateToDetail(position: LatLng, data: List<PlaceItem>) {
         data.forEach {
             if (position.latitude == it.latitude && position.longitude == it.longitude) {
                 val intent = Intent(this, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_PLACE, it)
+                intent.putExtra(DetailActivity.EXTRA_PLACE_ID, it.id)
                 startActivity(intent)
             }
         }
     }
 
-    private fun addStoryMarkers(places: List<Place>) {
+    private fun addStoryMarkers(places: List<PlaceItem>) {
         places.forEach {
             if (it.latitude != null && it.longitude != null) {
                 val latLng = LatLng(it.latitude, it.longitude)

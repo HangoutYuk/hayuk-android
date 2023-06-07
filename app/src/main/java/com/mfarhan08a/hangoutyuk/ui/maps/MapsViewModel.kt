@@ -9,5 +9,5 @@ import kotlinx.coroutines.Dispatchers
 class MapsViewModel(private val repository: AppRepository) : ViewModel() {
     fun getToken() = repository.getToken().asLiveData(Dispatchers.IO)
 
-    fun getAllPlaces(token: String, location: Location) = repository.getAllPlaces(token, location)
+    fun getPlaceRecomendation(token: String, location: Location) = repository.getPlaceRecomendation(token, location)
 }

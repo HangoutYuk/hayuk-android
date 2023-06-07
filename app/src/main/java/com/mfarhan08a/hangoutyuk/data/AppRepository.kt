@@ -165,29 +165,32 @@ class AppRepository(
         }
     }
 
-    fun getAllPlaces(token: String, location: Location): LiveData<Result<PlaceResponse>> = liveData(Dispatchers.IO) {
-        emit(Result.Loading)
-        try {
-            val latlng = "${location.latitude},${location.longitude}"
-            val response = apiService.getPlacesRecomendation(token, latlng)
-            emit(Result.Success(response))
-            Log.d(TAG, response.toString())
-        } catch (e: Exception) {
-            Log.d(TAG, e.toString())
-            emit(Result.Error(e.message.toString()))
+    fun getPlaceRecomendation(token: String, location: Location): LiveData<Result<PlaceResponse>> =
+        liveData(Dispatchers.IO) {
+            emit(Result.Loading)
+            try {
+                val latlng = "${location.latitude},${location.longitude}"
+                val response = apiService.getPlacesRecomendation(token, latlng)
+                emit(Result.Success(response))
+                Log.d(TAG, response.toString())
+            } catch (e: Exception) {
+                Log.d(TAG, e.toString())
+                emit(Result.Error(e.message.toString()))
+            }
         }
-    }
 
-    /*fun getDetailPlace(id: Int): LiveData<Result<Place>> = liveData(Dispatchers.IO) {
-        emit(Result.Loading)
-        try {
-            val response = FakeDataPlace.placesData[id - 1]
-            Log.d(TAG, response.toString())
-            emit(Result.Success(response))
-        } catch (e: Exception) {
-            emit(Result.Error(e.message.toString()))
+    fun getPlaceDetail(token: String, id: String): LiveData<Result<PlaceDetailResponse>> =
+        liveData(Dispatchers.IO) {
+            emit(Result.Loading)
+            try {
+                val response = apiService.getPlaceDetail(token, id)
+                emit(Result.Success(response))
+                Log.d(TAG, response.toString())
+            } catch (e: Exception) {
+                emit(Result.Error(e.message.toString()))
+                Log.d(TAG, e.toString())
+            }
         }
-    }*/
 
 //    fun getAllPlaces(): LiveData<Result<List<Place>>> =
 //        liveData(Dispatchers.IO) {

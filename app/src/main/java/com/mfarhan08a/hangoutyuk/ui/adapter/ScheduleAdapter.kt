@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mfarhan08a.hangoutyuk.databinding.ItemScheduleBinding
 
-class ScheduleAdapter(private val listSchedule: List<String>) :
+class ScheduleAdapter(private val listSchedule: List<String?>) :
     RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
 
     class ScheduleViewHolder(private val binding: ItemScheduleBinding) :
@@ -27,7 +27,7 @@ class ScheduleAdapter(private val listSchedule: List<String>) :
         holder: ScheduleViewHolder,
         position: Int
     ) {
-        holder.bind(listSchedule[position])
+        holder.bind(listSchedule[position]!!)
     }
 
     override fun getItemCount(): Int = listSchedule.size

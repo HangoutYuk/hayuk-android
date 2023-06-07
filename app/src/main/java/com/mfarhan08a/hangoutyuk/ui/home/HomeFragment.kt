@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationServices
 import com.mfarhan08a.hangoutyuk.R
 import com.mfarhan08a.hangoutyuk.data.Result
 import com.mfarhan08a.hangoutyuk.data.model.DataUser
-import com.mfarhan08a.hangoutyuk.data.model.Place
+import com.mfarhan08a.hangoutyuk.data.model.PlaceItem
 import com.mfarhan08a.hangoutyuk.databinding.FragmentHomeBinding
 import com.mfarhan08a.hangoutyuk.ui.adapter.PlaceAdapter
 import com.mfarhan08a.hangoutyuk.ui.detail.DetailActivity
@@ -162,14 +162,14 @@ class HomeFragment : Fragment() {
             showLoading(true)
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
-                    homeViewModel.getAllPlaces(token, location)
+                    homeViewModel.getPlaceRecomendation(token, location)
                         .observe(requireActivity()) {
                             when (it) {
                                 is Result.Loading -> {
                                     showLoading(true)
                                 }
                                 is Result.Success -> {
-                                    setPlacesData(it.data.data)
+                                    setPlacesData(it.data.data, location)
                                     showLoading(false)
                                 }
                                 is Result.Error -> {
@@ -203,25 +203,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-//    suspend fun getLocation(): LiveData<Result<Location>> = liveData(Dispatchers.IO) {
-//        emit(Result.Loading)
-//        try {
-//            if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-//                checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-//            ) {
-//                getMyLastLocation()
-//                fusedLocationClient.lastLocation.addOnCompleteListener {
-//                    val response = it.result
-//                    location = response
-//                }
-//            }
-//            emit(Result.Success(location!!))
-//        } catch (e: Exception) {
-//            emit(Result.Error(e.message.toString()))
-//        }
-//    }
-
     private fun logout() {
         homeViewModel.clearToken()
         val intent = Intent(requireContext(), LoginActivity::class.java)
@@ -235,12 +216,12 @@ class HomeFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun setPlacesData(data: List<Place>) {
-        val adapter = PlaceAdapter(data)
+    private fun setPlacesData(data: List<PlaceItem>, location: Location) {
+        val adapter = PlaceAdapter(data, location)
         adapter.setOnItemClickCallBack(object : PlaceAdapter.OnItemClickCallback {
-            override fun onItemClicked(place: Place) {
+            override fun onItemClicked(place: PlaceItem) {
                 val intent = Intent(requireContext(), DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_PLACE, place)
+                intent.putExtra(DetailActivity.EXTRA_PLACE_ID, place.id)
                 startActivity(intent)
             }
         })

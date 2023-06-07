@@ -17,7 +17,7 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
     }
     fun getUserById(token: String, id: String) = repository.getUserById(token, id)
 
-    fun getAllPlaces(token: String, location: Location) = repository.getAllPlaces(token, location)
+    fun getPlaceRecomendation(token: String, location: Location) = repository.getPlaceRecomendation(token, location)
 //    fun getAllPlaces() = repository.getAllPlaces()
 
 }

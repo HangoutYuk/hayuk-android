@@ -35,11 +35,17 @@ interface ApiService {
         @Path("id") id: String,
     ): UpdateResponse
 
-    @GET("ml-endpoint/{location}")
+    @GET("places/{location}")
     suspend fun getPlacesRecomendation(
         @Header("auth-token") token: String,
         @Path("location") location: String,
     ): PlaceResponse
+
+    @GET("places/details/{placeId}")
+    suspend fun getPlaceDetail(
+        @Header("auth-token") token: String,
+        @Path("placeId") placeId: String,
+    ): PlaceDetailResponse
 
     @GET("user/{id}")
     suspend fun getUserbyId(
