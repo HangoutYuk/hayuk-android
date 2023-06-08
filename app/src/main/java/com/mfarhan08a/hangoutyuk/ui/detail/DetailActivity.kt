@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.mfarhan08a.hangoutyuk.R
 import com.mfarhan08a.hangoutyuk.data.Result
 import com.mfarhan08a.hangoutyuk.data.model.Place
 import com.mfarhan08a.hangoutyuk.databinding.ActivityDetailBinding
@@ -21,6 +22,9 @@ import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
+
+    private var place: Place? = null
+    private var isPlaceFavorite: Boolean = false
 
     private val detailViewModel by viewModels<DetailViewModel> {
         ViewModelFactory.getInstance(application)
@@ -44,6 +48,13 @@ class DetailActivity : AppCompatActivity() {
         Log.d(TAG, "placeid: $placeId")
 
         detailViewModel.apply {
+            isPlaceFavorite = isFavorited(placeId!!)
+            if (isPlaceFavorite) {
+                binding.btnFav.setImageResource(R.drawable.ic_favorited)
+            } else {
+                binding.btnFav.setImageResource(R.drawable.ic_favorite)
+            }
+
             getToken().observe(this@DetailActivity) { token ->
                 if (!token.isNullOrEmpty() && !placeId.isNullOrEmpty()) {
                     getPlaceDetail(token, placeId).observe(this@DetailActivity) {
@@ -57,6 +68,9 @@ class DetailActivity : AppCompatActivity() {
                                 showDetail(it.data.data)
                                 showLoading(false)
                                 Log.d(TAG, "success..")
+                                binding.btnFav.setOnClickListener { _ ->
+                                    favorite(it.data.data)
+                                }
                             }
                             is Result.Error -> {
                                 showLoading(false)
@@ -93,6 +107,21 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun favorite(data: List<Place?>?) {
+        val dataPlace = data?.get(0)!!
+        dataPlace.apply {
+            if (isPlaceFavorite) {
+                detailViewModel.deleteFavorite(id!!)
+                isPlaceFavorite = false
+                binding.btnFav.setImageResource(R.drawable.ic_favorite)
+            } else {
+                detailViewModel.addToFavorite(this)
+                isPlaceFavorite = true
+                binding.btnFav.setImageResource(R.drawable.ic_favorited)
+            }
+        }
+    }
+
     private fun showDetail(data: List<Place?>?) {
         val dataPlace = data?.get(0)!!
         Log.d(TAG, "photo: ${dataPlace.photo}")
@@ -101,9 +130,15 @@ class DetailActivity : AppCompatActivity() {
             showSchedule(schedule)
             showContact(phone, website)
             binding.apply {
-                tvDetailName.text = name
-                tvDetailCategories.text = category
-                tvDetailAddress.text = address
+                if (name != null) {
+                    tvDetailName.text = name
+                }
+                if (category != null) {
+                    tvDetailCategories.text = category
+                }
+                if (address != null) {
+                    tvDetailAddress.text = address
+                }
                 if (!review.isNullOrEmpty()) {
                     val adapterReview = ReviewAdapter(review)
                     rvReview.adapter = adapterReview
@@ -112,6 +147,8 @@ class DetailActivity : AppCompatActivity() {
                     Glide.with(this@DetailActivity)
                         .load(photo)
                         .into(ivDetailPhoto)
+                } else {
+                    ivDetailPhoto.setImageResource(R.drawable.no_image)
                 }
                 if (totalReview != null) {
                     tvDetailRatingTotalReview.text =
@@ -164,17 +201,19 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSchedule(schedule: List<List<String?>?>?) {
-        val sch = schedule?.get(0)!!
-        binding.apply {
-            if (!sch[0].isNullOrEmpty()) {
-                val scheduleAdapter = ScheduleAdapter(sch)
-                binding.rvSchedule.adapter = scheduleAdapter
-            } else {
-                tvSchedule.visibility = View.GONE
-                rvSchedule.visibility = View.GONE
-                div3.visibility = View.GONE
+    private fun showSchedule(schedule: List<List<String>?>) {
+        if (schedule[0] != null) {
+            val sch = schedule[0]
+            binding.apply {
+                if (sch?.get(0) != null) {
+                    val scheduleAdapter = ScheduleAdapter(sch)
+                    binding.rvSchedule.adapter = scheduleAdapter
+                }
             }
+        } else {
+            binding.tvSchedule.visibility = View.GONE
+            binding.rvSchedule.visibility = View.GONE
+            binding.div3.visibility = View.GONE
         }
     }
 

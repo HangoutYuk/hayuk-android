@@ -8,6 +8,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.room.ColumnInfo
+import com.mfarhan08a.hangoutyuk.data.local.entity.FavoriteEntity
+import com.mfarhan08a.hangoutyuk.data.local.room.FavoriteDao
+import com.mfarhan08a.hangoutyuk.data.local.room.FavoriteDatabase
 import com.mfarhan08a.hangoutyuk.data.model.*
 import com.mfarhan08a.hangoutyuk.data.network.ApiService
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +23,7 @@ import org.json.JSONObject
 class AppRepository(
     private val apiService: ApiService,
     private val dataStore: DataStore<Preferences>,
+    private val favoriteDao: FavoriteDao,
 ) {
     fun getToken(): Flow<String?> {
         return dataStore.data.map { preferences ->
@@ -192,6 +197,30 @@ class AppRepository(
             }
         }
 
+    suspend fun addToFavorite(place: Place) {
+        val favoritePlace = FavoriteEntity(
+            id = place.id!!,
+            photo = place.photo!!,
+            name = place.name!!,
+            category = place.category!!,
+            rating = place.rating!!,
+            totalReview = place.totalReview!!,
+            latitude = place.latitude!!,
+            longitude = place.longitude!!,
+        )
+        favoriteDao.insertFavorite(favoritePlace)
+    }
+
+    fun isFavorited(id: String): Boolean = favoriteDao.isFavorited(id)
+
+    suspend fun deleteFavorite(id: String) {
+        favoriteDao.deleteFavorite(id)
+    }
+
+    fun getFavoritePlaces(): LiveData<List<FavoriteEntity>> {
+        return favoriteDao.getFavoritePlaces()
+    }
+
 //    fun getAllPlaces(): LiveData<Result<List<Place>>> =
 //        liveData(Dispatchers.IO) {
 //            emit(Result.Loading)
@@ -267,9 +296,11 @@ class AppRepository(
         @Volatile
         private var instance: AppRepository? = null
         fun getInstance(
-            apiService: ApiService, dataStore: DataStore<Preferences>
+            apiService: ApiService,
+            dataStore: DataStore<Preferences>,
+            favoriteDao: FavoriteDao,
         ): AppRepository = instance ?: synchronized(this) {
-            instance ?: AppRepository(apiService, dataStore)
+            instance ?: AppRepository(apiService, dataStore, favoriteDao)
         }.also { instance = it }
     }
 }

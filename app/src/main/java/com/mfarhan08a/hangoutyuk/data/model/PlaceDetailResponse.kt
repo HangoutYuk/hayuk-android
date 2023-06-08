@@ -53,7 +53,7 @@ data class Place(
 	val photo: String? = null,
 
 	@field:SerializedName("schedule")
-	val schedule: List<List<String?>?>? = null,
+	val schedule: List<List<String>?>,
 
 	@field:SerializedName("phone")
 	val phone: String? = null,

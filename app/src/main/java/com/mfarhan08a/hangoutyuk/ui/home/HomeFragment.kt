@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import com.mfarhan08a.hangoutyuk.data.model.DataUser
 import com.mfarhan08a.hangoutyuk.data.model.PlaceItem
 import com.mfarhan08a.hangoutyuk.databinding.FragmentHomeBinding
 import com.mfarhan08a.hangoutyuk.ui.adapter.PlaceAdapter
+import com.mfarhan08a.hangoutyuk.ui.choosemap.ChooseMapsActivity
 import com.mfarhan08a.hangoutyuk.ui.detail.DetailActivity
 import com.mfarhan08a.hangoutyuk.ui.login.LoginActivity
 import com.mfarhan08a.hangoutyuk.ui.maps.MapsActivity
@@ -76,6 +78,14 @@ class HomeFragment : Fragment() {
                 tkn = token
                 showLoading(true)
                 getMyLastLocation(token)
+                binding.fabMylocation.setOnClickListener {
+                    getMyLastLocation(token)
+                    Toast.makeText(
+                        requireContext(),
+                        "getting recomendation for your location..",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 homeViewModel.getId().observe(requireActivity()) { id ->
                     homeViewModel.getUserById(token, id!!).observe(requireActivity()) {
                         when (it) {
@@ -118,12 +128,67 @@ class HomeFragment : Fragment() {
             btnInfo.setOnClickListener {
                 navigateToOnboarding()
             }
-            binding.fabMaps.setOnClickListener {
+            fabMaps.setOnClickListener {
                 navigateToMaps(location!!)
             }
+            fabChooseLocation.setOnClickListener {
+                navigateToChooseMaps()
+            }
         }
+    }
 
+    private val resultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == ChooseMapsActivity.RESULT_CODE && result.data != null) {
+            val location =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra(
+                        ChooseMapsActivity.EXTRA_SELECTED_LOCATION,
+                        Location::class.java
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    result.data?.getParcelableExtra(ChooseMapsActivity.EXTRA_SELECTED_LOCATION)
+                }
 
+            homeViewModel.getPlaceRecomendation(tkn, location!!).observe(this) {
+                when (it) {
+                    is Result.Loading -> {
+                        showLoading(true)
+                        Toast.makeText(
+                            requireContext(),
+                            "Getting Your Choosen Location",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    is Result.Success -> {
+                        setPlacesData(it.data.data, location)
+                        showLoading(false)
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            requireContext(),
+                            "getplace e: ${it.error}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "cant choose location",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun navigateToChooseMaps() {
+        val intent = Intent(activity, ChooseMapsActivity::class.java)
+        intent.putExtra(ChooseMapsActivity.EXTRA_LOCATION, location)
+        resultLauncher.launch(intent)
     }
 
     private val requestPermissionLauncher =
@@ -142,7 +207,7 @@ class HomeFragment : Fragment() {
                     }
                 }
                 else -> {
-
+                    Log.d(TAG, "can't get permission")
                 }
             }
         }
@@ -218,8 +283,10 @@ class HomeFragment : Fragment() {
 
     private fun setPlacesData(data: List<PlaceItem>, location: Location) {
         val adapter = PlaceAdapter(data, location)
+
         adapter.setOnItemClickCallBack(object : PlaceAdapter.OnItemClickCallback {
             override fun onItemClicked(place: PlaceItem) {
+                Log.d(TAG, "place: $place")
                 val intent = Intent(requireContext(), DetailActivity::class.java)
                 intent.putExtra(DetailActivity.EXTRA_PLACE_ID, place.id)
                 startActivity(intent)

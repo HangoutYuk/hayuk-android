@@ -92,6 +92,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
+
+
         setMapStyle()
     }
 

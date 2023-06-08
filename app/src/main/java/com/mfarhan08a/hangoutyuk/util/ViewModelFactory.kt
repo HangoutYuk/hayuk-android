@@ -26,7 +26,6 @@ class ViewModelFactory private constructor(
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> return ProfileViewModel(repository) as T
             modelClass.isAssignableFrom(MapsViewModel::class.java) -> return MapsViewModel(repository) as T
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> return ProfileViewModel(repository) as T
-//            modelClass.isAssignableFrom(SettingsViewModel::class.java) -> return SettingsViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class: " + modelClass.name)
     }

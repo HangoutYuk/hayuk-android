@@ -1,6 +1,8 @@
 package com.mfarhan08a.hangoutyuk.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class PlaceResponse(
 
@@ -26,7 +28,7 @@ data class PlaceItem(
 	val rating: Double,
 
 	@field:SerializedName("photo")
-	val photo: String,
+	val photo: String? = null,
 
 	@field:SerializedName("id")
 	val id: String,

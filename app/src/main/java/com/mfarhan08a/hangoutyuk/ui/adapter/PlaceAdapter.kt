@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.mfarhan08a.hangoutyuk.R
 import com.mfarhan08a.hangoutyuk.data.model.PlaceItem
 import com.mfarhan08a.hangoutyuk.databinding.ItemPlaceBinding
 import com.mfarhan08a.hangoutyuk.util.Formater
@@ -26,22 +27,27 @@ class PlaceAdapter(private val listPlace: List<PlaceItem>, private val userLocat
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(place: PlaceItem, userLocation: Location) {
-            Glide.with(itemView.context)
-                .load(place.photo)
-                .into(binding.itemImage)
+            if (place.photo != null) {
+                Glide.with(itemView.context)
+                    .load(place.photo)
+                    .into(binding.itemImage)
+            } else {
+                binding.itemImage.setImageResource(R.drawable.no_image)
+            }
             binding.itemName.text = place.name
             binding.itemCategory.text = place.category
             binding.itemRating.text = place.rating.toString()
             binding.itemTotalReview.text = Formater.totalReviewFormat(place.totalReview)
             val latlng = "${place.latitude},${place.longitude}"
-            binding.itemDistance.text = userLocation.distanceTo(Location(latlng)).toDouble().toString()
+            binding.itemDistance.text =
+                userLocation.distanceTo(Location(latlng)).toInt().toString()
         }
 
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): PlaceViewHolder {
         val binding = ItemPlaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PlaceViewHolder(binding)
