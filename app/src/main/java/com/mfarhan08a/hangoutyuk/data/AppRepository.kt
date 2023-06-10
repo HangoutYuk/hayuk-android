@@ -8,10 +8,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import androidx.room.ColumnInfo
 import com.mfarhan08a.hangoutyuk.data.local.entity.FavoriteEntity
 import com.mfarhan08a.hangoutyuk.data.local.room.FavoriteDao
-import com.mfarhan08a.hangoutyuk.data.local.room.FavoriteDatabase
 import com.mfarhan08a.hangoutyuk.data.model.*
 import com.mfarhan08a.hangoutyuk.data.network.ApiService
 import kotlinx.coroutines.Dispatchers

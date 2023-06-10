@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var location: Location? = null
+
     private var dataUser: DataUser? = null
     private lateinit var tkn: String
 
@@ -51,6 +51,7 @@ class HomeFragment : Fragment() {
 
     companion object {
         private val TAG = HomeFragment::class.java.simpleName
+        var location: Location? = null
     }
 
     override fun onCreateView(
@@ -247,7 +248,7 @@ class HomeFragment : Fragment() {
                                 }
                             }
                         }
-                    this.location = location
+                    HomeFragment.location = location
                 } else {
                     Toast.makeText(
                         requireContext(),

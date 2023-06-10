@@ -10,4 +10,6 @@ class MapsViewModel(private val repository: AppRepository) : ViewModel() {
     fun getToken() = repository.getToken().asLiveData(Dispatchers.IO)
 
     fun getPlaceRecomendation(token: String, location: Location) = repository.getPlaceRecomendation(token, location)
+
+    fun getFavoritePlaces() = repository.getFavoritePlaces()
 }

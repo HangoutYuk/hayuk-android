@@ -28,8 +28,12 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API}Y" />
+            android:value="${MAPS_API}" />
 
+        <activity
+            android:name=".ui.mapsfavorite.MapsFavoriteActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps_favorite" />
         <activity
             android:name=".ui.choosemap.ChooseMapsActivity"
             android:exported="false"

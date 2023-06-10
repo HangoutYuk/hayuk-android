@@ -39,10 +39,21 @@ class ChooseMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        binding.topAppBar.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
+        mMap.uiSettings.apply {
+            isZoomControlsEnabled = true
+            isIndoorLevelPickerEnabled = true
+            isCompassEnabled = true
+            isMapToolbarEnabled = true
+        }
 
         val userLocation = if (Build.VERSION.SDK_INT >= 33) {
             intent.getParcelableExtra(EXTRA_LOCATION, Location::class.java)!!
@@ -58,7 +69,7 @@ class ChooseMapsActivity : AppCompatActivity(), OnMapReadyCallback {
             "loc: $lng",
             Toast.LENGTH_SHORT
         ).show()
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(lng))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lng, 10f))
 
         mMap.setOnMapClickListener {
             val selectedLocation = Location("${it.latitude},${it.longitude}")
