@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mfarhan08a.hangoutyuk.R
 import com.mfarhan08a.hangoutyuk.data.local.entity.FavoriteEntity
 import com.mfarhan08a.hangoutyuk.data.model.PlaceItem
 import com.mfarhan08a.hangoutyuk.databinding.FragmentFavoriteBinding
@@ -44,28 +45,42 @@ class FavoriteFragment : Fragment() {
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewPlace.layoutManager = layoutManager
+        binding.recyclerViewPlace.adapter = null
 
         favoriteViewModel.getFavoritePlaces().observe(requireActivity()) { data ->
-            if (!data.isEmpty()) {
-                showLoading(true)
-                showEmptyText(false)
-                setPlacesData(data, HomeFragment.location!!)
-                showLoading(false)
-                binding.btnMaps.setOnClickListener {
-                    navigateToMaps()
+            try {
+                if (data.isNotEmpty()) {
+                    showLoading(true)
+                    showEmptyText(false)
+                    setPlacesData(data, HomeFragment.location!!)
+                    showLoading(false)
+                    binding.btnMaps.setOnClickListener {
+                        navigateToMaps()
+                    }
+                } else {
+                    showEmptyText(true)
+                    binding.btnMaps.setOnClickListener {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.empty_favorite),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 }
-            } else {
-                showEmptyText(true)
-                binding.btnMaps.setOnClickListener {
-                    Toast.makeText(requireContext(), "There is no favorite yet", Toast.LENGTH_SHORT)
-                        .show()
-                }
+            } catch (e: Exception) {
+                Log.d(TAG, e.toString())
             }
         }
     }
 
     private fun showEmptyText(isEmpty: Boolean) {
-        binding.textViewEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        try {
+            binding.textViewEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
+            binding.recyclerViewPlace.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        } catch (e: Exception) {
+            Log.d(TAG, e.toString())
+        }
     }
 
     private fun navigateToMaps() {
@@ -103,7 +118,11 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        try {
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        } catch (e: Exception) {
+            Log.d(TAG, e.toString())
+        }
     }
 
     override fun onDestroyView() {

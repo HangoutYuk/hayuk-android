@@ -68,7 +68,7 @@ class MapsFavoriteActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 showLoading(false)
             } else {
-                Toast.makeText(this, "There is no Favorite yet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.empty_favorite), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -87,16 +87,14 @@ class MapsFavoriteActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun addPlaceMarkers(places: List<FavoriteEntity>) {
         places.forEach {
-            if (it.latitude != null && it.longitude != null) {
-                val latLng = LatLng(it.latitude, it.longitude)
-                mMap.addMarker(
-                    MarkerOptions()
-                        .position(latLng)
-                        .title(it.name)
-                        .snippet(it.category)
-                )
-                boundsBuilder.include(latLng)
-            }
+            val latLng = LatLng(it.latitude, it.longitude)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title(it.name)
+                    .snippet(it.category)
+            )
+            boundsBuilder.include(latLng)
         }
         val bounds: LatLngBounds = boundsBuilder.build()
         mMap.animateCamera(
@@ -111,7 +109,7 @@ class MapsFavoriteActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setMapStyle() {
         try {
-            Log.e(MapsActivity.TAG, "success?")
+            Log.e(MapsActivity.TAG, "success")
             val success =
                 mMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(

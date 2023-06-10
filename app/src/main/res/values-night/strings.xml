@@ -61,4 +61,9 @@
     <string name="ex_distance">3.2 km away</string>
     <string name="time_icon">Time icon</string>
     <string name="delete_account">Delete Account</string>
+    <string name="my_location">My Location</string>
+    <string name="choose_location">Choose Location</string>
+    <string name="empty_favorite">There is no favorite places yet</string>
+    <string name="error_detail">Can\'t get detail</string>
+    <string name="get_recommendation_mylocation">getting recomendation for your location..</string>
 </resources>

@@ -8,8 +8,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.mfarhan08a.hangoutyuk.R
 import com.mfarhan08a.hangoutyuk.data.Result
 import com.mfarhan08a.hangoutyuk.data.model.Place
@@ -18,21 +20,16 @@ import com.mfarhan08a.hangoutyuk.ui.adapter.ReviewAdapter
 import com.mfarhan08a.hangoutyuk.ui.adapter.ScheduleAdapter
 import com.mfarhan08a.hangoutyuk.util.Formater
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
-
-    private var place: Place? = null
     private var isPlaceFavorite: Boolean = false
 
     private val detailViewModel by viewModels<DetailViewModel> {
         ViewModelFactory.getInstance(application)
-    }
-
-    companion object {
-        private val TAG = DetailActivity::class.java.simpleName
-        const val EXTRA_PLACE_ID = "extra_place_id"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,28 +37,26 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvReview.layoutManager = layoutManager
 
         val placeId = intent.getStringExtra(EXTRA_PLACE_ID)
         Log.d(TAG, "placeid: $placeId")
 
         detailViewModel.apply {
-            isPlaceFavorite = isFavorited(placeId!!)
-            if (isPlaceFavorite) {
-                binding.btnFav.setImageResource(R.drawable.ic_favorited)
-            } else {
-                binding.btnFav.setImageResource(R.drawable.ic_favorite)
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                isPlaceFavorite = isFavorited(placeId!!)
+                displayFavoriteButton(isPlaceFavorite)
             }
 
             getToken().observe(this@DetailActivity) { token ->
-                if (!token.isNullOrEmpty() && !placeId.isNullOrEmpty()) {
+                if (!token.isNullOrEmpty() && placeId?.isNotEmpty()!!) {
                     getPlaceDetail(token, placeId).observe(this@DetailActivity) {
                         when (it) {
                             is Result.Loading -> {
-                                Log.d(TAG, "loading..")
                                 showLoading(true)
+                                Log.d(TAG, "loading..")
 
                             }
                             is Result.Success -> {
@@ -74,17 +69,17 @@ class DetailActivity : AppCompatActivity() {
                             }
                             is Result.Error -> {
                                 showLoading(false)
-                                Log.d(TAG, "error..")
+                                Log.d(TAG, "error: ${it.error}")
                                 Toast.makeText(
                                     this@DetailActivity,
-                                    "getplace e: ${it.error}",
+                                    "getplace error: ${it.error}",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                             else -> {
                                 Toast.makeText(
                                     this@DetailActivity,
-                                    "Can't get detail",
+                                    getString(R.string.error_detail),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -92,9 +87,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 } else {
                     Toast.makeText(
-                        this@DetailActivity,
-                        "error id or token",
-                        Toast.LENGTH_SHORT
+                        this@DetailActivity, "error id or token", Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -107,24 +100,29 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun displayFavoriteButton(isFav: Boolean) {
+        binding.btnFav.setImageResource(
+            if (isFav) R.drawable.ic_favorited else R.drawable.ic_favorite
+        )
+    }
+
     private fun favorite(data: List<Place?>?) {
         val dataPlace = data?.get(0)!!
         dataPlace.apply {
             if (isPlaceFavorite) {
+                Snackbar.make(binding.root, "Place not favorite", Snackbar.LENGTH_SHORT).show()
                 detailViewModel.deleteFavorite(id!!)
-                isPlaceFavorite = false
-                binding.btnFav.setImageResource(R.drawable.ic_favorite)
             } else {
+                Snackbar.make(binding.root, "Place Favorited", Snackbar.LENGTH_SHORT).show()
                 detailViewModel.addToFavorite(this)
-                isPlaceFavorite = true
-                binding.btnFav.setImageResource(R.drawable.ic_favorited)
             }
+            isPlaceFavorite = !isPlaceFavorite
+            displayFavoriteButton(isPlaceFavorite)
         }
     }
 
     private fun showDetail(data: List<Place?>?) {
         val dataPlace = data?.get(0)!!
-        Log.d(TAG, "photo: ${dataPlace.photo}")
         dataPlace.apply {
             showAbout(about)
             showSchedule(schedule)
@@ -134,7 +132,7 @@ class DetailActivity : AppCompatActivity() {
                     tvDetailName.text = name
                 }
                 if (category != null) {
-                    tvDetailCategories.text = category
+                    tvDetailCategories.text = Formater.formatCategories(category)
                 }
                 if (address != null) {
                     tvDetailAddress.text = address
@@ -144,15 +142,13 @@ class DetailActivity : AppCompatActivity() {
                     rvReview.adapter = adapterReview
                 }
                 if (photo != null) {
-                    Glide.with(this@DetailActivity)
-                        .load(photo)
-                        .into(ivDetailPhoto)
+                    Glide.with(this@DetailActivity).load(photo).into(ivDetailPhoto)
                 } else {
                     ivDetailPhoto.setImageResource(R.drawable.no_image)
                 }
                 if (totalReview != null) {
                     tvDetailRatingTotalReview.text =
-                        "$rating (${Formater.totalReviewFormat(totalReview)})"
+                        "$rating ${Formater.totalReviewFormat(totalReview)}"
                 }
                 if (mapsURL != null) {
                     fabMaps.setOnClickListener {
@@ -219,5 +215,10 @@ class DetailActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        private val TAG = DetailActivity::class.java.simpleName
+        const val EXTRA_PLACE_ID = "extra_place_id"
     }
 }

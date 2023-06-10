@@ -70,7 +70,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mapsViewModel.getToken().observe(this) { token ->
             if (token != null) {
-                mapsViewModel.getPlaceRecomendation(token, location).observe(this) { result ->
+                mapsViewModel.getPlaceRecommendation(token, location).observe(this) { result ->
                     when (result) {
                         is Result.Loading -> {
                             showLoading(true)
@@ -84,6 +84,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                         is Result.Error -> {
                             showLoading(false)
+                            Log.d(TAG, result.error)
                             Toast.makeText(this, getString(R.string.error_maps), Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -107,16 +108,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun addPlaceMarkers(places: List<PlaceItem>) {
         places.forEach {
-            if (it.latitude != null && it.longitude != null) {
-                val latLng = LatLng(it.latitude, it.longitude)
-                mMap.addMarker(
-                    MarkerOptions()
-                        .position(latLng)
-                        .title(it.name)
-                        .snippet(it.category)
-                )
-                boundsBuilder.include(latLng)
-            }
+            val latLng = LatLng(it.latitude, it.longitude)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title(it.name)
+                    .snippet(it.category)
+            )
+            boundsBuilder.include(latLng)
         }
         val bounds: LatLngBounds = boundsBuilder.build()
         mMap.animateCamera(
@@ -131,7 +130,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setMapStyle() {
         try {
-            Log.e(TAG, "success?")
+            Log.e(TAG, "success")
             val success =
                 mMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(

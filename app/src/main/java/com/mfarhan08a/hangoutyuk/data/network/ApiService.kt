@@ -2,7 +2,6 @@ package com.mfarhan08a.hangoutyuk.data.network
 
 import com.mfarhan08a.hangoutyuk.data.model.*
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.http.*
 
 
@@ -36,7 +35,7 @@ interface ApiService {
     ): UpdateResponse
 
     @GET("places/{location}")
-    suspend fun getPlacesRecomendation(
+    suspend fun getPlacesRecommendation(
         @Header("auth-token") token: String,
         @Path("location") location: String,
     ): PlaceResponse
@@ -48,7 +47,7 @@ interface ApiService {
     ): PlaceDetailResponse
 
     @GET("user/{id}")
-    suspend fun getUserbyId(
+    suspend fun getUserById(
         @Header("auth-token") token: String,
         @Path("id") id: String,
     ): UserResponse

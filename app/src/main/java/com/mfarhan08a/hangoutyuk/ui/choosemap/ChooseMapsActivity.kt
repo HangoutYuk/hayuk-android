@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -23,12 +22,6 @@ class ChooseMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityChooseMapsBinding
-
-    companion object {
-        const val EXTRA_LOCATION = "extra_location"
-        const val EXTRA_SELECTED_LOCATION = "extra_selected_location"
-        const val RESULT_CODE = 110
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,15 +57,12 @@ class ChooseMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val lng = LatLng(userLocation.latitude, userLocation.longitude)
 
-        Toast.makeText(
-            this,
-            "loc: $lng",
-            Toast.LENGTH_SHORT
-        ).show()
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lng, 10f))
 
         mMap.setOnMapClickListener {
-            val selectedLocation = Location("${it.latitude},${it.longitude}")
+            val selectedLocation = Location("provider")
+            selectedLocation.latitude = it.latitude
+            selectedLocation.longitude = it.longitude
             val locationIntent = Intent()
             locationIntent.putExtra(EXTRA_SELECTED_LOCATION, selectedLocation)
             setResult(RESULT_CODE, locationIntent)
@@ -84,7 +74,7 @@ class ChooseMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setMapStyle() {
         try {
-            Log.e(MapsActivity.TAG, "success?")
+            Log.e(MapsActivity.TAG, "success")
             val success =
                 mMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
@@ -98,5 +88,11 @@ class ChooseMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } catch (e: Resources.NotFoundException) {
             Log.e(MapsActivity.TAG, getString(R.string.error_style), e)
         }
+    }
+
+    companion object {
+        const val EXTRA_LOCATION = "extra_location"
+        const val EXTRA_SELECTED_LOCATION = "extra_selected_location"
+        const val RESULT_CODE = 110
     }
 }

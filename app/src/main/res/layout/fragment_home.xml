@@ -128,14 +128,15 @@
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@color/design_default_color_surface"
                 android:contentDescription="@string/maps"
-                android:text="My Location"
+                android:text="@string/my_location"
                 android:textColor="@color/md_theme_light_primary"
                 app:elevation="2dp"
                 app:icon="@drawable/ic_mylocation"
                 app:iconTint="@color/md_theme_light_primary"
                 app:layout_constraintEnd_toStartOf="@+id/fab_choose_location"
                 app:layout_constraintStart_toStartOf="@+id/header"
-                app:layout_constraintTop_toBottomOf="@+id/header" />
+                app:layout_constraintTop_toBottomOf="@+id/header"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/fab_choose_location"
@@ -144,14 +145,13 @@
                 android:layout_marginTop="24dp"
                 android:backgroundTint="@color/design_default_color_surface"
                 android:contentDescription="@string/maps"
-                android:text="Choose Location"
+                android:text="@string/choose_location"
                 android:textColor="@color/md_theme_light_primary"
                 android:translationZ="10dp"
                 app:elevation="2dp"
                 app:icon="@drawable/ic_choose_location"
                 app:iconTint="@color/md_theme_light_primary"
                 app:layout_constraintEnd_toEndOf="@+id/header"
-
                 app:layout_constraintStart_toEndOf="@+id/fab_mylocation"
                 app:layout_constraintTop_toBottomOf="@+id/header" />
 

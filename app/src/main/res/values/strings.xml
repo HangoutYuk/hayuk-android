@@ -3,7 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_favorite">Favorites</string>
     <string name="title_chats">Chats</string>
-    <string name="rating_totalreview">%d (%d)</string>
+    <string name="rating_totalreview">%d %s</string>
     <string name="title_login">Login</string>
     <string name="subtitle_login">Discover, Engage, and Create Unforgettable Moments at Vibrant Hangout Spots</string>
     <string name="email">Email</string>
@@ -52,7 +52,7 @@
     <string name="review_detail">Seattle-based coffeehouse chain known for its signature roasts, light bites and WiFi availability.</string>
     <string name="rating">Rating</string>
     <string name="title_activity_maps">MapsActivity</string>
-    <string name="location_not_found">Can\'t get your location</string>
+    <string name="location_not_found">Can\'t get your location, Try again.</string>
     <string name="error_maps">Error loading maps</string>
     <string name="style_failed">Style parsing failed.</string>
     <string name="error_style">\"Can\'t find style. Error: \"</string>
@@ -70,8 +70,17 @@
     <string name="ex_rating">4.5</string>
     <string name="ex_distance">3.2 km away</string>
     <string name="time_icon">Time icon</string>
-    <string name="ex_schedule">Senin: 09.00 - 22.00</string>
+    <string name="ex_schedule">Senin: 09.00 – 22.00</string>
     <string name="delete_account">Delete Account</string>
     <string name="title_activity_choose_maps">ChooseMapsActivity</string>
     <string name="title_activity_maps_favorite">MapsFavoriteActivity</string>
+    <string name="my_location">My Location</string>
+    <string name="choose_location">Choose Location</string>
+    <string name="empty_favorite">There is no favorite places yet</string>
+    <string name="error_detail">Can\'t get detail</string>
+    <string name="get_recommendation_mylocation">Getting recommendation for your location..</string>
+    <string name="get_recommendation_choose">Getting Your Chosen Location..</string>
+    <string name="no_location_chosen">No Location Chosen</string>
+    <string name="cannot_change_profile">Can\'t change profile, check your data</string>
+    <string name="account_deleted">Account Deleted</string>
 </resources>

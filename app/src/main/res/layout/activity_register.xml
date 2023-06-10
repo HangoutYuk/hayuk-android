@@ -36,7 +36,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:srcCompat="@drawable/register" />
+        app:srcCompat="@drawable/register"
+        android:contentDescription="@string/title_register" />
 
 
     <androidx.constraintlayout.widget.Guideline

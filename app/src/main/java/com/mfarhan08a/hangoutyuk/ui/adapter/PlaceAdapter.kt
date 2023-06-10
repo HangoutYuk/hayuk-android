@@ -35,14 +35,14 @@ class PlaceAdapter(private val listPlace: List<PlaceItem>, private val userLocat
                 binding.itemImage.setImageResource(R.drawable.no_image)
             }
             binding.itemName.text = place.name
-            binding.itemCategory.text = place.category
+            binding.itemCategory.text = Formater.formatCategories(place.category)
             binding.itemRating.text = place.rating.toString()
             binding.itemTotalReview.text = Formater.totalReviewFormat(place.totalReview)
-            val latlng = "${place.latitude},${place.longitude}"
-            binding.itemDistance.text =
-                userLocation.distanceTo(Location(latlng)).toInt().toString()
+            val placeLocation = Location("provider")
+            placeLocation.latitude = place.latitude
+            placeLocation.longitude = place.longitude
+            binding.itemDistance.text = Formater.distanceFormat(placeLocation, userLocation)
         }
-
     }
 
     override fun onCreateViewHolder(

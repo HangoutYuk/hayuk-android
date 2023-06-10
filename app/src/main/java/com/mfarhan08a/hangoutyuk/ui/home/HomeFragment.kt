@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -34,7 +33,6 @@ import com.mfarhan08a.hangoutyuk.ui.maps.MapsActivity
 import com.mfarhan08a.hangoutyuk.ui.onboarding.OnboardingActivity
 import com.mfarhan08a.hangoutyuk.ui.profile.ProfileActivity
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
-import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
@@ -44,14 +42,10 @@ class HomeFragment : Fragment() {
 
     private var dataUser: DataUser? = null
     private lateinit var tkn: String
+    private var fromChooseMaps: Boolean = false
 
     private val homeViewModel by viewModels<HomeViewModel> {
         ViewModelFactory.getInstance(requireContext())
-    }
-
-    companion object {
-        private val TAG = HomeFragment::class.java.simpleName
-        var location: Location? = null
     }
 
     override fun onCreateView(
@@ -67,59 +61,79 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        Log.d(TAG, "userloc: ${location.toString()}")
 
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewPlace.layoutManager = layoutManager
 
-        Log.d(TAG, location.toString())
+        try {
+            homeViewModel.getToken().observe(requireActivity()) { token ->
+                if (token != null) {
+                    tkn = token
 
-        homeViewModel.getToken().observe(requireActivity()) { token ->
-            if (token != null) {
-                tkn = token
-                showLoading(true)
-                getMyLastLocation(token)
-                binding.fabMylocation.setOnClickListener {
-                    getMyLastLocation(token)
-                    Toast.makeText(
-                        requireContext(),
-                        "getting recomendation for your location..",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                homeViewModel.getId().observe(requireActivity()) { id ->
-                    homeViewModel.getUserById(token, id!!).observe(requireActivity()) {
-                        when (it) {
-                            is Result.Loading -> {
-                            }
-                            is Result.Success -> {
-                                dataUser = it.data.data
-                                binding.textViewName.text = it.data.data.name
-                                if (it.data.data.photoUrl == null) {
-                                    binding.ivUserPhoto.setImageResource(R.drawable.blank_picture)
-                                } else {
-                                    Glide.with(requireActivity())
-                                        .load(it.data.data.photoUrl)
-                                        .into(binding.ivUserPhoto)
+                    if (!fromChooseMaps) {
+                        getMyLastLocation(token)
+                    }
+
+                    try {
+                        binding.fabMylocation.setOnClickListener {
+                            fromChooseMaps = false
+                            getMyLastLocation(token)
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.get_recommendation_mylocation),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } catch (e: Exception) {
+                        Log.d(TAG, e.toString())
+                    }
+                    homeViewModel.getId().observe(requireActivity()) { id ->
+                        homeViewModel.getUserById(token, id!!).observe(requireActivity()) {
+                            when (it) {
+                                is Result.Loading -> {
+                                    Log.d(TAG, "loading data user..")
+                                }
+                                is Result.Success -> {
+                                    try {
+                                        dataUser = it.data.data
+                                        binding.textViewName.text = it.data.data.name
+                                        if (it.data.data.photoUrl == null) {
+                                            binding.ivUserPhoto.setImageResource(R.drawable.blank_picture)
+                                        } else {
+                                            Glide.with(requireActivity())
+                                                .load(it.data.data.photoUrl)
+                                                .into(binding.ivUserPhoto)
+                                        }
+                                    } catch (e: Exception) {
+                                        Log.d(TAG, e.toString())
+                                    }
+                                }
+                                is Result.Error -> {
+                                    Log.d(TAG, it.error)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "getplace error: ${it.error}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
-                            is Result.Error -> {
-                                Log.d(TAG, it.error)
-                                Toast.makeText(
-                                    requireContext(),
-                                    "getplace e: ${it.error}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        }
+                        try {
+                            binding.cardView.setOnClickListener {
+                                navigateToProfile()
                             }
+                        } catch (e: Exception) {
+                            Log.d(TAG, e.toString())
                         }
                     }
-                    binding.cardView.setOnClickListener {
-                        navigateToProfile()
-                    }
+                } else {
+                    logout()
                 }
-            } else {
-                logout()
             }
+        } catch (e: Exception) {
+            Log.d(TAG, e.toString())
         }
 
         binding.apply {
@@ -133,6 +147,7 @@ class HomeFragment : Fragment() {
                 navigateToMaps(location!!)
             }
             fabChooseLocation.setOnClickListener {
+                fromChooseMaps = true
                 navigateToChooseMaps()
             }
         }
@@ -153,25 +168,28 @@ class HomeFragment : Fragment() {
                     result.data?.getParcelableExtra(ChooseMapsActivity.EXTRA_SELECTED_LOCATION)
                 }
 
-            homeViewModel.getPlaceRecomendation(tkn, location!!).observe(this) {
+            Log.d(TAG, "chosen loc: ${location.toString()}")
+
+            homeViewModel.getPlaceRecommendation(tkn, location!!).observe(this) {
                 when (it) {
                     is Result.Loading -> {
                         showLoading(true)
                         Toast.makeText(
                             requireContext(),
-                            "Getting Your Choosen Location",
+                            getString(R.string.get_recommendation_choose),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                     is Result.Success -> {
-                        setPlacesData(it.data.data, location)
+                        setPlacesData(it.data.data, HomeFragment.location!!)
                         showLoading(false)
+                        fromChooseMaps = false
                     }
                     is Result.Error -> {
                         showLoading(false)
                         Toast.makeText(
                             requireContext(),
-                            "getplace e: ${it.error}",
+                            "getplace error: ${it.error}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -180,7 +198,7 @@ class HomeFragment : Fragment() {
         } else {
             Toast.makeText(
                 requireContext(),
-                "cant choose location",
+                getString(R.string.no_location_chosen),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -198,14 +216,10 @@ class HomeFragment : Fragment() {
         ) { permissions ->
             when {
                 permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
-                    lifecycleScope.launch {
-                        getMyLastLocation(tkn)
-                    }
+                    getMyLastLocation(tkn)
                 }
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
-                    lifecycleScope.launch {
-                        getMyLastLocation(tkn)
-                    }
+                    getMyLastLocation(tkn)
                 }
                 else -> {
                     Log.d(TAG, "can't get permission")
@@ -228,15 +242,19 @@ class HomeFragment : Fragment() {
             showLoading(true)
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
-                    homeViewModel.getPlaceRecomendation(token, location)
+                    homeViewModel.getPlaceRecommendation(token, location)
                         .observe(requireActivity()) {
                             when (it) {
                                 is Result.Loading -> {
                                     showLoading(true)
                                 }
                                 is Result.Success -> {
-                                    setPlacesData(it.data.data, location)
-                                    showLoading(false)
+                                    try {
+                                        setPlacesData(it.data.data, location)
+                                        showLoading(false)
+                                    } catch (e: Exception) {
+                                        Log.d(TAG, e.toString())
+                                    }
                                 }
                                 is Result.Error -> {
                                     showLoading(false)
@@ -252,11 +270,9 @@ class HomeFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Location is not found. Try Again",
+                        getString(R.string.location_not_found),
                         Toast.LENGTH_SHORT
                     ).show()
-                    getMyLastLocation(token)
-                    showLoading(true)
                 }
             }
         } else {
@@ -284,7 +300,6 @@ class HomeFragment : Fragment() {
 
     private fun setPlacesData(data: List<PlaceItem>, location: Location) {
         val adapter = PlaceAdapter(data, location)
-
         adapter.setOnItemClickCallBack(object : PlaceAdapter.OnItemClickCallback {
             override fun onItemClicked(place: PlaceItem) {
                 Log.d(TAG, "place: $place")
@@ -297,7 +312,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        try {
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        } catch (e: Exception) {
+            Log.d(TAG, e.toString())
+        }
     }
 
     private fun navigateToMaps(location: Location) {
@@ -314,5 +333,10 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private val TAG = HomeFragment::class.java.simpleName
+        var location: Location? = null
     }
 }

@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.mfarhan08a.hangoutyuk.R
 import com.mfarhan08a.hangoutyuk.data.Result
@@ -83,39 +82,14 @@ class ProfileActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(
                                 this@ProfileActivity,
-                                "Can't change profile, check your data",
+                                getString(R.string.cannot_change_profile),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
 
                     binding.btnDelete.setOnClickListener {
-                        deleteUser(token!!, id!!).observe(this@ProfileActivity) {
-                            when (it) {
-                                is Result.Loading -> {
-                                    showLoading(true)
-                                }
-                                is Result.Success -> {
-                                    showLoading(false)
-                                    Toast.makeText(
-                                        this@ProfileActivity,
-                                        "Account Deleted",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    clearToken()
-                                    navigateToLogin()
-                                }
-                                is Result.Error -> {
-                                    showLoading(false)
-                                    Toast.makeText(
-                                        this@ProfileActivity,
-                                        it.error,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                }
-                            }
-                        }
+                        deleteAccount(token, id)
                     }
                 }
             }
@@ -125,6 +99,36 @@ class ProfileActivity : AppCompatActivity() {
             startGallery()
         }
 
+    }
+
+    private fun deleteAccount(token: String?, id: String?) {
+        profileViewModel.apply {
+            deleteUser(token!!, id!!).observe(this@ProfileActivity) {
+                when (it) {
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
+                    is Result.Success -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            this@ProfileActivity,
+                            getString(R.string.account_deleted),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        clearToken()
+                        navigateToLogin()
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            this@ProfileActivity,
+                            it.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun navigateToLogin() {

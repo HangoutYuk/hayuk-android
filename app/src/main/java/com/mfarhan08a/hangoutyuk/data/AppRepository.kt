@@ -29,7 +29,6 @@ class AppRepository(
         }
     }
 
-
     fun getId(): Flow<String?> {
         return dataStore.data.map { preferences ->
             preferences[ID]
@@ -110,7 +109,7 @@ class AppRepository(
         liveData(Dispatchers.IO) {
             emit(Result.Loading)
             try {
-                val response = apiService.getUserbyId(token, id)
+                val response = apiService.getUserById(token, id)
                 emit(Result.Success(response))
                 Log.d(TAG, response.toString())
             } catch (e: Exception) {
@@ -157,7 +156,6 @@ class AppRepository(
                 paramObject.put("password", password)
             }
 
-
             Log.d(TAG, paramObject.toString())
             val response = apiService.updateProfile(token, id, paramObject.toString())
             emit(Result.Success(response))
@@ -168,12 +166,12 @@ class AppRepository(
         }
     }
 
-    fun getPlaceRecomendation(token: String, location: Location): LiveData<Result<PlaceResponse>> =
+    fun getPlaceRecommendation(token: String, location: Location): LiveData<Result<PlaceResponse>> =
         liveData(Dispatchers.IO) {
             emit(Result.Loading)
             try {
                 val latlng = "${location.latitude},${location.longitude}"
-                val response = apiService.getPlacesRecomendation(token, latlng)
+                val response = apiService.getPlacesRecommendation(token, latlng)
                 emit(Result.Success(response))
                 Log.d(TAG, response.toString())
             } catch (e: Exception) {
