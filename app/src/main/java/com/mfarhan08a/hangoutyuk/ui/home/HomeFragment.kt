@@ -111,12 +111,15 @@ class HomeFragment : Fragment() {
                                     }
                                 }
                                 is Result.Error -> {
-                                    Log.d(TAG, it.error)
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "getplace error: ${it.error}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    Log.d(TAG, "e: ${it.error}")
+//                                    Toast.makeText(
+//                                        requireContext(),
+//                                        "getUser error: ${it.error}",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+                                    if (it.error.trim() == "HTTP 400") {
+                                        logout()
+                                    }
                                 }
                             }
                         }
@@ -187,11 +190,11 @@ class HomeFragment : Fragment() {
                     }
                     is Result.Error -> {
                         showLoading(false)
-                        Toast.makeText(
-                            requireContext(),
-                            "getplace error: ${it.error}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "getplace error: ${it.error}",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
                 }
             }
@@ -258,11 +261,14 @@ class HomeFragment : Fragment() {
                                 }
                                 is Result.Error -> {
                                     showLoading(false)
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "getplace e: ${it.error}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+//                                    Toast.makeText(
+//                                        requireContext(),
+//                                        "getplace e: ${it.error}",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+                                    if (it.error == "HTTP 400") {
+                                        logout()
+                                    }
                                 }
                             }
                         }

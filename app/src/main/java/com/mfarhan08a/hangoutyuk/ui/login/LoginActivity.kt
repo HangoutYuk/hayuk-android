@@ -14,6 +14,7 @@ import com.mfarhan08a.hangoutyuk.databinding.ActivityLoginBinding
 import com.mfarhan08a.hangoutyuk.ui.register.RegisterActivity
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
 import com.mfarhan08a.hangoutyuk.data.Result
+import com.mfarhan08a.hangoutyuk.ui.onboarding.OnboardingActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -60,7 +61,14 @@ class LoginActivity : AppCompatActivity() {
                             is Result.Loading -> showLoading(true)
                             is Result.Success -> {
                                 showLoading(false)
-                                navigateToMain()
+                                loginViewModel.getOnboarding()
+                                    .observe(this@LoginActivity) { onboard ->
+                                        if (onboard!!) {
+                                            navigateToMain()
+                                        } else {
+                                            navigateToOnboarding()
+                                        }
+                                    }
                             }
                             is Result.Error -> {
                                 showLoading(false)
@@ -83,6 +91,12 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    private fun navigateToOnboarding() {
+        val intent = Intent(this, OnboardingActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun navigateToMain() {

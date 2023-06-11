@@ -10,6 +10,7 @@ import com.mfarhan08a.hangoutyuk.ui.favorite.FavoriteViewModel
 import com.mfarhan08a.hangoutyuk.ui.home.HomeViewModel
 import com.mfarhan08a.hangoutyuk.ui.login.LoginViewModel
 import com.mfarhan08a.hangoutyuk.ui.maps.MapsViewModel
+import com.mfarhan08a.hangoutyuk.ui.onboarding.OnboardingViewModel
 import com.mfarhan08a.hangoutyuk.ui.profile.ProfileViewModel
 import com.mfarhan08a.hangoutyuk.ui.register.RegisterViewModel
 
@@ -28,6 +29,7 @@ class ViewModelFactory private constructor(
             modelClass.isAssignableFrom(MapsViewModel::class.java) -> return MapsViewModel(repository) as T
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> return ProfileViewModel(repository) as T
             modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> return FavoriteViewModel(repository) as T
+            modelClass.isAssignableFrom(OnboardingViewModel::class.java) -> return OnboardingViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class: " + modelClass.name)
     }

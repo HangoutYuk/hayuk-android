@@ -4,6 +4,7 @@ import android.location.Location
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.LiveData
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 import org.json.JSONObject
+import retrofit2.HttpException
 
 class AppRepository(
     private val apiService: ApiService,
@@ -29,9 +31,21 @@ class AppRepository(
         }
     }
 
+    fun getOnboarding(): Flow<Boolean?> {
+        return dataStore.data.map { preferences ->
+            preferences[ONBOARDING] ?: false
+        }
+    }
+
     fun getId(): Flow<String?> {
         return dataStore.data.map { preferences ->
             preferences[ID]
+        }
+    }
+
+    suspend fun saveOnboarding(onboard: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[ONBOARDING] = onboard
         }
     }
 
@@ -187,9 +201,9 @@ class AppRepository(
                 val response = apiService.getPlaceDetail(token, id)
                 emit(Result.Success(response))
                 Log.d(TAG, response.toString())
-            } catch (e: Exception) {
-                emit(Result.Error(e.message.toString()))
+            } catch (e: HttpException) {
                 Log.d(TAG, e.toString())
+                emit(Result.Error(e.code().toString()))
             }
         }
 
@@ -288,6 +302,7 @@ class AppRepository(
         // datastore
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val ID = stringPreferencesKey("id")
+        private val ONBOARDING = booleanPreferencesKey("onboarding")
 
         @Volatile
         private var instance: AppRepository? = null
