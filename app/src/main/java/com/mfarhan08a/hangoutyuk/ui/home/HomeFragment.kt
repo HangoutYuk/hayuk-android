@@ -44,6 +44,7 @@ class HomeFragment : Fragment() {
     private lateinit var tkn: String
     private var fromChooseMaps: Boolean = false
 
+
     private val homeViewModel by viewModels<HomeViewModel> {
         ViewModelFactory.getInstance(requireContext())
     }
@@ -72,8 +73,14 @@ class HomeFragment : Fragment() {
                 if (token != null) {
                     tkn = token
 
-                    if (!fromChooseMaps) {
+                    if (!fromChooseMaps && places.isNullOrEmpty()) {
                         getMyLastLocation(token)
+                    } else {
+                        try {
+                            setPlacesData(places!!, location!!)
+                        } catch (e: Exception) {
+                            Log.d(TAG, e.toString())
+                        }
                     }
 
                     try {
@@ -112,11 +119,6 @@ class HomeFragment : Fragment() {
                                 }
                                 is Result.Error -> {
                                     Log.d(TAG, "e: ${it.error}")
-//                                    Toast.makeText(
-//                                        requireContext(),
-//                                        "getUser error: ${it.error}",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
                                     if (it.error.trim() == "HTTP 400") {
                                         logout()
                                     }
@@ -154,6 +156,7 @@ class HomeFragment : Fragment() {
                 navigateToChooseMaps()
             }
         }
+
     }
 
     private val resultLauncher = registerForActivityResult(
@@ -184,17 +187,18 @@ class HomeFragment : Fragment() {
                         ).show()
                     }
                     is Result.Success -> {
+                        places = it.data.data
                         setPlacesData(it.data.data, HomeFragment.location!!)
                         showLoading(false)
                         fromChooseMaps = false
                     }
                     is Result.Error -> {
                         showLoading(false)
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "getplace error: ${it.error}",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "getplace error: ${it.error}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -253,6 +257,7 @@ class HomeFragment : Fragment() {
                                 }
                                 is Result.Success -> {
                                     try {
+                                        places = it.data.data
                                         setPlacesData(it.data.data, location)
                                         showLoading(false)
                                     } catch (e: Exception) {
@@ -261,11 +266,11 @@ class HomeFragment : Fragment() {
                                 }
                                 is Result.Error -> {
                                     showLoading(false)
-//                                    Toast.makeText(
-//                                        requireContext(),
-//                                        "getplace e: ${it.error}",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "getplace error: ${it.error}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     if (it.error == "HTTP 400") {
                                         logout()
                                     }
@@ -344,5 +349,6 @@ class HomeFragment : Fragment() {
     companion object {
         private val TAG = HomeFragment::class.java.simpleName
         var location: Location? = null
+        var places: List<PlaceItem>? = null
     }
 }

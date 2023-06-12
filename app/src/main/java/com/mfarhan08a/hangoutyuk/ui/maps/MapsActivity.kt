@@ -6,9 +6,7 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -19,22 +17,19 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mfarhan08a.hangoutyuk.R
-import com.mfarhan08a.hangoutyuk.data.Result
 import com.mfarhan08a.hangoutyuk.data.model.PlaceItem
 import com.mfarhan08a.hangoutyuk.databinding.ActivityMapsBinding
 import com.mfarhan08a.hangoutyuk.ui.detail.DetailActivity
-import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
+import com.mfarhan08a.hangoutyuk.ui.home.HomeFragment
+import com.mfarhan08a.hangoutyuk.util.Formater
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var location: Location
+    private var places: List<PlaceItem>? = null
     private val boundsBuilder = LatLngBounds.Builder()
-
-    private val mapsViewModel by viewModels<MapsViewModel> {
-        ViewModelFactory.getInstance(application)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,29 +62,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             isCompassEnabled = true
             isMapToolbarEnabled = true
         }
+        places = HomeFragment.places
 
-        mapsViewModel.getToken().observe(this) { token ->
-            if (token != null) {
-                mapsViewModel.getPlaceRecommendation(token, location).observe(this) { result ->
-                    when (result) {
-                        is Result.Loading -> {
-                            showLoading(true)
-                        }
-                        is Result.Success -> {
-                            showLoading(false)
-                            addPlaceMarkers(result.data.data)
-                            mMap.setOnInfoWindowClickListener {
-                                navigateToDetail(it.position, result.data.data)
-                            }
-                        }
-                        is Result.Error -> {
-                            showLoading(false)
-                            Log.d(TAG, result.error)
-                            Toast.makeText(this, getString(R.string.error_maps), Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    }
-                }
+        if (places.isNullOrEmpty()) {
+            Toast.makeText(this, getString(R.string.no_places), Toast.LENGTH_SHORT).show()
+        } else {
+            addPlaceMarkers(places!!)
+            mMap.setOnInfoWindowClickListener {
+                navigateToDetail(it.position, places!!)
             }
         }
 
@@ -113,7 +93,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 MarkerOptions()
                     .position(latLng)
                     .title(it.name)
-                    .snippet(it.category)
+                    .snippet(Formater.formatCategories(it.category))
             )
             boundsBuilder.include(latLng)
         }
@@ -144,10 +124,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } catch (e: Resources.NotFoundException) {
             Log.e(TAG, getString(R.string.error_style), e)
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {

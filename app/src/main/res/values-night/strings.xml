@@ -66,4 +66,5 @@
     <string name="empty_favorite">There is no favorite places yet</string>
     <string name="error_detail">Can\'t get detail</string>
     <string name="get_recommendation_mylocation">getting recomendation for your location..</string>
+    <string name="no_places">There is no places yet</string>
 </resources>
