@@ -129,7 +129,7 @@ class DetailActivity : AppCompatActivity() {
                     Log.d(TAG, "error: ${it.error}")
                     Toast.makeText(
                         this@DetailActivity,
-                        "getplace error: ${it.error}",
+                        "polls error: ${it.error}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

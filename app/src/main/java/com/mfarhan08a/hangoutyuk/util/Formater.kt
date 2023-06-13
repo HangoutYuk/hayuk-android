@@ -2,7 +2,6 @@ package com.mfarhan08a.hangoutyuk.util
 
 import android.location.Location
 import java.text.DecimalFormat
-import kotlin.math.roundToInt
 
 object Formater {
     fun totalReviewFormat(totalReview: Int): String {

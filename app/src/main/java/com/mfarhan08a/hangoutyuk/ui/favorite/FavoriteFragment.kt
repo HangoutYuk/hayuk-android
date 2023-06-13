@@ -48,7 +48,7 @@ class FavoriteFragment : Fragment() {
         binding.recyclerViewPlace.layoutManager = layoutManager
         binding.recyclerViewPlace.adapter = null
 
-        favoriteViewModel.getFavoritePlaces().observe(requireActivity()) { data ->
+        favoriteViewModel.getFavoritePlaces().observe(viewLifecycleOwner) { data ->
             try {
                 if (data.isNotEmpty()) {
                     showLoading(true)
@@ -77,8 +77,10 @@ class FavoriteFragment : Fragment() {
 
     private fun showEmptyText(isEmpty: Boolean) {
         try {
-            binding.textViewEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
-            binding.recyclerViewPlace.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            if (isAdded) {
+                binding.textViewEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
+                binding.recyclerViewPlace.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            }
         } catch (e: Exception) {
             Log.d(TAG, e.toString())
         }
@@ -90,38 +92,42 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun setPlacesData(data: List<FavoriteEntity>, location: Location) {
-        val favoritePlaces = ArrayList<PlaceItem>()
-        data.forEach {
-            favoritePlaces.add(
-                PlaceItem(
-                    id = it.id,
-                    photo = it.photo,
-                    name = it.name,
-                    category = it.category,
-                    rating = it.rating,
-                    totalReview = it.totalReview,
-                    latitude = it.latitude,
-                    longitude = it.longitude,
+        if (isAdded) {
+            val favoritePlaces = ArrayList<PlaceItem>()
+            data.forEach {
+                favoritePlaces.add(
+                    PlaceItem(
+                        id = it.id,
+                        photo = it.photo,
+                        name = it.name,
+                        category = it.category,
+                        rating = it.rating,
+                        totalReview = it.totalReview,
+                        latitude = it.latitude,
+                        longitude = it.longitude,
+                    )
                 )
-            )
-        }
-
-        val adapter = PlaceAdapter(favoritePlaces, location)
-        adapter.setOnItemClickCallBack(object : PlaceAdapter.OnItemClickCallback {
-            override fun onItemClicked(place: PlaceItem) {
-                Log.d(TAG, "place: $place")
-                val intent = Intent(requireContext(), DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_PLACE_ID, place.id)
-                intent.putExtra(DetailActivity.EXTRA_USER_ID, dataUser?.id)
-                startActivity(intent)
             }
-        })
-        binding.recyclerViewPlace.adapter = adapter
+
+            val adapter = PlaceAdapter(favoritePlaces, location)
+            adapter.setOnItemClickCallBack(object : PlaceAdapter.OnItemClickCallback {
+                override fun onItemClicked(place: PlaceItem) {
+                    Log.d(TAG, "place: $place")
+                    val intent = Intent(requireContext(), DetailActivity::class.java)
+                    intent.putExtra(DetailActivity.EXTRA_PLACE_ID, place.id)
+                    intent.putExtra(DetailActivity.EXTRA_USER_ID, dataUser?.id)
+                    startActivity(intent)
+                }
+            })
+            binding.recyclerViewPlace.adapter = adapter
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
         try {
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isAdded) {
+                binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
         } catch (e: Exception) {
             Log.d(TAG, e.toString())
         }

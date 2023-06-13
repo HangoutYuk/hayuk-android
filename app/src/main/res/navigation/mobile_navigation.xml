@@ -17,4 +17,10 @@
         android:label="@string/title_favorite"
         tools:layout="@layout/fragment_favorite" />
 
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.mfarhan08a.hangoutyuk.ui.history.HistoryFragment"
+        android:label="@string/title_history"
+        tools:layout="@layout/fragment_history" />
+
 </navigation>

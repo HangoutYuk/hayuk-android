@@ -44,6 +44,12 @@ interface ApiService {
         @Path("id") id: String,
     ): UserResponse
 
+    @GET("user/{id}/polls")
+    suspend fun getPollsUser(
+        @Header("auth-token") token: String,
+        @Path("id") id: String,
+    ): PollResponse
+
     @Multipart
     @POST("user/{id}")
     suspend fun postPhotoProfile(
@@ -65,6 +71,6 @@ interface ApiService {
     suspend fun createPoll(
         @Header("auth-token") token: String,
         @Body body: String?
-    ): PollResponse
+    ): CreatePollResponse
 }
 

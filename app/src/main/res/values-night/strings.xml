@@ -67,4 +67,7 @@
     <string name="error_detail">Can\'t get detail</string>
     <string name="get_recommendation_mylocation">getting recomendation for your location..</string>
     <string name="no_places">There is no places yet</string>
+    <string name="poll_history">Poll History</string>
+    <string name="title_history">History</string>
+    <string name="empty_polls">There is no polls yet</string>
 </resources>

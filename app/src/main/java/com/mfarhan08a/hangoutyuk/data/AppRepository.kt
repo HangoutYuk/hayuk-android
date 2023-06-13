@@ -209,7 +209,7 @@ class AppRepository(
 
     fun createPoll(
         token: String, placeId: String, userId: String
-    ): LiveData<Result<PollResponse>> = liveData(Dispatchers.IO) {
+    ): LiveData<Result<CreatePollResponse>> = liveData(Dispatchers.IO) {
         emit(Result.Loading)
         try {
             val paramObject = JSONObject()
@@ -223,6 +223,21 @@ class AppRepository(
         } catch (e: Exception) {
             Log.d(TAG, e.toString())
             emit(Result.Error(e.toString()))
+        }
+    }
+
+    fun getPollsUser(
+        token: String,
+        userId: String,
+    ): LiveData<Result<PollResponse>> = liveData(Dispatchers.IO) {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getPollsUser(token, userId)
+            emit(Result.Success(response))
+            Log.d(TAG, response.toString())
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+            Log.d(TAG, e.toString())
         }
     }
 

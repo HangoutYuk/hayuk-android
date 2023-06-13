@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
         binding.recyclerViewPlace.layoutManager = layoutManager
 
         try {
-            homeViewModel.getToken().observe(requireActivity()) { token ->
+            homeViewModel.getToken().observe(viewLifecycleOwner) { token ->
                 if (token != null) {
                     tkn = token
 
@@ -95,8 +95,8 @@ class HomeFragment : Fragment() {
                     } catch (e: Exception) {
                         Log.d(TAG, e.toString())
                     }
-                    homeViewModel.getId().observe(requireActivity()) { id ->
-                        homeViewModel.getUserById(token, id!!).observe(requireActivity()) {
+                    homeViewModel.getId().observe(viewLifecycleOwner) { id ->
+                        homeViewModel.getUserById(token, id!!).observe(viewLifecycleOwner) {
                             when (it) {
                                 is Result.Loading -> {
                                     Log.d(TAG, "loading data user..")
@@ -175,7 +175,7 @@ class HomeFragment : Fragment() {
 
             Log.d(TAG, "chosen loc: ${location.toString()}")
 
-            homeViewModel.getPlaceRecommendation(tkn, location!!).observe(this) {
+            homeViewModel.getPlaceRecommendation(tkn, location!!).observe(viewLifecycleOwner) {
                 when (it) {
                     is Result.Loading -> {
                         showLoading(true)
@@ -249,7 +249,7 @@ class HomeFragment : Fragment() {
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     homeViewModel.getPlaceRecommendation(token, location)
-                        .observe(requireActivity()) {
+                        .observe(viewLifecycleOwner) {
                             when (it) {
                                 is Result.Loading -> {
                                     showLoading(true)
@@ -309,22 +309,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun setPlacesData(data: List<PlaceItem>, location: Location) {
-        val adapter = PlaceAdapter(data, location)
-        adapter.setOnItemClickCallBack(object : PlaceAdapter.OnItemClickCallback {
-            override fun onItemClicked(place: PlaceItem) {
-                Log.d(TAG, "place: $place")
-                val intent = Intent(requireContext(), DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_PLACE_ID, place.id)
-                intent.putExtra(DetailActivity.EXTRA_USER_ID, dataUser?.id)
-                startActivity(intent)
-            }
-        })
-        binding.recyclerViewPlace.adapter = adapter
+        if (isAdded) {
+            val adapter = PlaceAdapter(data, location)
+            adapter.setOnItemClickCallBack(object : PlaceAdapter.OnItemClickCallback {
+                override fun onItemClicked(place: PlaceItem) {
+                    Log.d(TAG, "place: $place")
+                    val intent = Intent(requireContext(), DetailActivity::class.java)
+                    intent.putExtra(DetailActivity.EXTRA_PLACE_ID, place.id)
+                    intent.putExtra(DetailActivity.EXTRA_USER_ID, dataUser?.id)
+                    startActivity(intent)
+                }
+            })
+            binding.recyclerViewPlace.adapter = adapter
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
         try {
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isAdded) {
+                binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
         } catch (e: Exception) {
             Log.d(TAG, e.toString())
         }

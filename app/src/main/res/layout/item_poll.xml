@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:contentDescription="card_item"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Media -->
+        <ImageView
+            android:id="@+id/item_history_photo"
+            android:layout_width="100dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/places_photo"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/place_name"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/item_totalReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ex_total_review"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toBottomOf="@+id/item_rating"
+                app:layout_constraintStart_toEndOf="@+id/imageView_star"
+                app:layout_constraintTop_toTopOf="@+id/item_rating" />
+
+            <ImageView
+                android:id="@+id/imageView_star"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/ic_stared"
+
+                app:layout_constraintBottom_toBottomOf="@+id/item_rating"
+                app:layout_constraintStart_toEndOf="@+id/item_rating"
+                app:layout_constraintTop_toTopOf="@+id/item_rating"
+                app:tint="@color/md_theme_light_secondaryContainer"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            <TextView
+                android:id="@+id/item_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/ex_rating"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintStart_toStartOf="@+id/item_name"
+                app:layout_constraintTop_toBottomOf="@+id/item_name" />
+
+            <Button
+                android:id="@+id/btn_share"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                android:text="share"
+                app:icon="@drawable/ic_share"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/item_rating"
+                app:layout_constraintTop_toBottomOf="@+id/item_rating" />
+
+            <Button
+                android:id="@+id/btn_visit"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="visit"
+                android:layout_marginStart="4dp"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                app:icon="@drawable/ic_open_in_browser"
+                app:layout_constraintStart_toEndOf="@+id/btn_share"
+                app:layout_constraintTop_toTopOf="@+id/btn_share" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

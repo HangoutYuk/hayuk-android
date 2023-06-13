@@ -22,6 +22,7 @@ import com.mfarhan08a.hangoutyuk.databinding.ActivityMapsFavoriteBinding
 import com.mfarhan08a.hangoutyuk.ui.detail.DetailActivity
 import com.mfarhan08a.hangoutyuk.ui.maps.MapsActivity
 import com.mfarhan08a.hangoutyuk.ui.maps.MapsViewModel
+import com.mfarhan08a.hangoutyuk.util.Formater
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
 
 class MapsFavoriteActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -92,7 +93,7 @@ class MapsFavoriteActivity : AppCompatActivity(), OnMapReadyCallback {
                 MarkerOptions()
                     .position(latLng)
                     .title(it.name)
-                    .snippet(it.category)
+                    .snippet(Formater.formatCategories(it.category))
             )
             boundsBuilder.include(latLng)
         }
