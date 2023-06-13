@@ -18,6 +18,7 @@ import com.mfarhan08a.hangoutyuk.databinding.FragmentFavoriteBinding
 import com.mfarhan08a.hangoutyuk.ui.adapter.PlaceAdapter
 import com.mfarhan08a.hangoutyuk.ui.detail.DetailActivity
 import com.mfarhan08a.hangoutyuk.ui.home.HomeFragment
+import com.mfarhan08a.hangoutyuk.ui.home.HomeFragment.Companion.dataUser
 import com.mfarhan08a.hangoutyuk.ui.mapsfavorite.MapsFavoriteActivity
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
 
@@ -111,6 +112,7 @@ class FavoriteFragment : Fragment() {
                 Log.d(TAG, "place: $place")
                 val intent = Intent(requireContext(), DetailActivity::class.java)
                 intent.putExtra(DetailActivity.EXTRA_PLACE_ID, place.id)
+                intent.putExtra(DetailActivity.EXTRA_USER_ID, dataUser?.id)
                 startActivity(intent)
             }
         })

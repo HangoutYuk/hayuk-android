@@ -41,7 +41,9 @@ class DetailActivity : AppCompatActivity() {
         binding.rvReview.layoutManager = layoutManager
 
         val placeId = intent.getStringExtra(EXTRA_PLACE_ID)
+        val userId = intent.getStringExtra(EXTRA_USER_ID)
         Log.d(TAG, "placeid: $placeId")
+        Log.d(TAG, "userId: $userId")
 
         detailViewModel.apply {
 
@@ -65,6 +67,9 @@ class DetailActivity : AppCompatActivity() {
                                 Log.d(TAG, "success..")
                                 binding.btnFav.setOnClickListener { _ ->
                                     favorite(it.data.data)
+                                }
+                                binding.fabPoll.setOnClickListener {
+                                    pollPlace(token, placeId, userId)
                                 }
                             }
                             is Result.Error -> {
@@ -96,6 +101,45 @@ class DetailActivity : AppCompatActivity() {
         binding.apply {
             btnBack.setOnClickListener {
                 finish()
+            }
+        }
+    }
+
+    private fun pollPlace(token: String, placeId: String, userId: String?) {
+        Log.d(TAG, "token: $token, placeid: $placeId, userid: $userId")
+        detailViewModel.createPoll(token, placeId, userId!!).observe(this) {
+            when (it) {
+                is Result.Loading -> {
+                    showLoading(true)
+                    Log.d(TAG, "loading..")
+
+                }
+                is Result.Success -> {
+                    showLoading(false)
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "text/plain"
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Poll For A Place With HangoutYuk!")
+                    intent.putExtra(Intent.EXTRA_TEXT, "Poll For A Place With HangoutYuk!\n${it.data.data}")
+                    val chooser = Intent.createChooser(intent, "Share with..")
+                    startActivity(chooser)
+                    Log.d(TAG, "success..")
+                }
+                is Result.Error -> {
+                    showLoading(false)
+                    Log.d(TAG, "error: ${it.error}")
+                    Toast.makeText(
+                        this@DetailActivity,
+                        "getplace error: ${it.error}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {
+                    Toast.makeText(
+                        this@DetailActivity,
+                        getString(R.string.error_detail),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
@@ -220,5 +264,6 @@ class DetailActivity : AppCompatActivity() {
     companion object {
         private val TAG = DetailActivity::class.java.simpleName
         const val EXTRA_PLACE_ID = "extra_place_id"
+        const val EXTRA_USER_ID = "extra_user_id"
     }
 }

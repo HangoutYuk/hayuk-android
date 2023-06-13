@@ -7,14 +7,6 @@ import retrofit2.http.*
 
 interface ApiService {
 
-//    @FormUrlEncoded
-//    @POST("register")
-//    suspend fun register(
-//        @Field("name") name: String,
-//        @Field("email") email: String,
-//        @Field("password") password: String
-//    ): RegisterResponse
-
     @Headers("Content-Type: application/json")
     @POST("register")
     suspend fun register(
@@ -67,4 +59,12 @@ interface ApiService {
         @Path("id") id: String,
         @Body body: String?,
     ) : UpdateResponse
+
+    @Headers("Content-Type: application/json")
+    @POST("poll/create")
+    suspend fun createPoll(
+        @Header("auth-token") token: String,
+        @Body body: String?
+    ): PollResponse
 }
+

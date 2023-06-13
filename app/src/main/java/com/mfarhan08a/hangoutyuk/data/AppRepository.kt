@@ -207,6 +207,25 @@ class AppRepository(
             }
         }
 
+    fun createPoll(
+        token: String, placeId: String, userId: String
+    ): LiveData<Result<PollResponse>> = liveData(Dispatchers.IO) {
+        emit(Result.Loading)
+        try {
+            val paramObject = JSONObject()
+            paramObject.put("placeId", placeId)
+            paramObject.put("userId", userId)
+            Log.d(TAG, paramObject.toString())
+
+            val response = apiService.createPoll(token, paramObject.toString())
+            emit(Result.Success(response))
+            Log.d(TAG, response.toString())
+        } catch (e: Exception) {
+            Log.d(TAG, e.toString())
+            emit(Result.Error(e.toString()))
+        }
+    }
+
     suspend fun addToFavorite(place: Place) {
         val favoritePlace = FavoriteEntity(
             id = place.id!!,
@@ -230,71 +249,6 @@ class AppRepository(
     fun getFavoritePlaces(): LiveData<List<FavoriteEntity>> {
         return favoriteDao.getFavoritePlaces()
     }
-
-//    fun getAllPlaces(): LiveData<Result<List<Place>>> =
-//        liveData(Dispatchers.IO) {
-//            emit(Result.Loading)
-//            try {
-////                val response = apiService.getPlacesRecomendation(token, location)
-//                val response = FakeData.place
-//                val dataPlace = ArrayList<Place>()
-//
-//                for (i in 0 until response.length()) {
-//                    val placeDetail = response.getJSONObject(i)
-//                    val placeReview = placeDetail.getJSONArray("review")
-//                    val placeSchedule = placeDetail.getJSONArray("schedule")
-//                    val dataReview = ArrayList<Review>()
-//                    val dataSchedule = ArrayList<String>()
-//                    val dataSchedules = ArrayList<List<String>>()
-//
-//                    for (j in 0 until placeReview.length()) {
-//                        val rev = placeReview.getJSONObject(j)
-//                        dataReview.add(
-//                            Review(
-//                                author = rev.getString("author"),
-//                                rating = rev.getString("rating").toInt(),
-//                                id = rev.getString("id"),
-//                                text = rev.getString("text"),
-//                                time = rev.getString("time"),
-//                            )
-//                        )
-//                    }
-//
-//                    if (placeSchedule.getString(0) != "null") {
-//                        val sch = placeSchedule.getJSONArray(0)
-//                        for (k in 0 until sch.length()) {
-//                            dataSchedule.add(sch.getString(k))
-//                        }
-//                    } else {
-//                        dataSchedule.add("null")
-//                    }
-//
-//                    dataSchedules.add(dataSchedule)
-//                    val place = Place(
-//                        id = placeDetail.getString("id"),
-//                        website = placeDetail.getString("website"),
-//                        address = placeDetail.getString("address"),
-//                        latitude = placeDetail.getString("latitude").toDouble(),
-//                        rating = placeDetail.getString("rating").toDouble(),
-//                        about = placeDetail.getString("about"),
-//                        photo = placeDetail.getString("photo"),
-//                        phone = placeDetail.getString("phone"),
-//                        schedule = dataSchedules,
-//                        review = dataReview,
-//                        name = placeDetail.getString("name"),
-//                        category = placeDetail.getString("category"),
-//                        totalReview = placeDetail.getString("totalReview").toInt(),
-//                        longitude = placeDetail.getString("longitude").toDouble(),
-//                    )
-//                    dataPlace.add(place)
-//                }
-//                emit(Result.Success(dataPlace))
-//                Log.d(TAG, dataPlace.toString())
-//            } catch (e: Exception) {
-//                emit(Result.Error(e.message.toString()))
-//                Log.d(TAG, e.toString())
-//            }
-//        }
 
     companion object {
         private val TAG = AppRepository::class.java.simpleName

@@ -40,7 +40,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private var dataUser: DataUser? = null
     private lateinit var tkn: String
     private var fromChooseMaps: Boolean = false
 
@@ -316,6 +315,7 @@ class HomeFragment : Fragment() {
                 Log.d(TAG, "place: $place")
                 val intent = Intent(requireContext(), DetailActivity::class.java)
                 intent.putExtra(DetailActivity.EXTRA_PLACE_ID, place.id)
+                intent.putExtra(DetailActivity.EXTRA_USER_ID, dataUser?.id)
                 startActivity(intent)
             }
         })
@@ -350,5 +350,6 @@ class HomeFragment : Fragment() {
         private val TAG = HomeFragment::class.java.simpleName
         var location: Location? = null
         var places: List<PlaceItem>? = null
+        var dataUser: DataUser? = null
     }
 }
