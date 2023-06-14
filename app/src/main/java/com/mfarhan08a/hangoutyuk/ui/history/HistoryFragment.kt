@@ -6,17 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mfarhan08a.hangoutyuk.data.Result
 import com.mfarhan08a.hangoutyuk.data.model.PollItem
 import com.mfarhan08a.hangoutyuk.databinding.FragmentHistoryBinding
 import com.mfarhan08a.hangoutyuk.ui.adapter.PollAdapter
 import com.mfarhan08a.hangoutyuk.util.ViewModelFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class HistoryFragment : Fragment() {
 
@@ -44,38 +42,42 @@ class HistoryFragment : Fragment() {
         binding.recyclerViewPoll.layoutManager = layoutManager
 
         try {
-            historyViewModel.apply {
-                getToken().observe(viewLifecycleOwner) { token ->
-                    getId().observe(viewLifecycleOwner) { userId ->
-                        getPollsUser(token!!, userId!!).observe(viewLifecycleOwner) {
-                            when (it) {
-                                is Result.Loading -> {
-                                    showLoading(true)
-                                }
-                                is Result.Success -> {
-                                    try {
-                                        showLoading(false)
-                                        if (it.data.data.isNotEmpty()) {
-                                            setUserPolls(it.data.data, requireContext())
-                                            showEmptyText(false)
-                                        } else {
-                                            showEmptyText(true)
-                                        }
-                                    } catch (e: Exception) {
-                                        Log.d(TAG, e.toString())
-                                    }
-                                }
-                                is Result.Error -> {
+            getPollHistory()
+        } catch (e: Exception) {
+            Log.d(TAG, e.toString())
+        }
+    }
+
+    private fun getPollHistory() {
+        historyViewModel.apply {
+            getToken().observe(viewLifecycleOwner) { token ->
+                getId().observe(viewLifecycleOwner) { userId ->
+                    getPollsUser(token!!, userId!!).observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Result.Loading -> {
+                                showLoading(true)
+                            }
+                            is Result.Success -> {
+                                try {
                                     showLoading(false)
-                                    Log.d(TAG, "e: ${it.error}")
+                                    if (it.data.data.isNotEmpty()) {
+                                        setUserPolls(it.data.data, requireContext())
+                                        showEmptyText(false)
+                                    } else {
+                                        showEmptyText(true)
+                                    }
+                                } catch (e: Exception) {
+                                    Log.d(TAG, e.toString())
                                 }
+                            }
+                            is Result.Error -> {
+                                showLoading(false)
+                                Log.d(TAG, "e: ${it.error}")
                             }
                         }
                     }
                 }
             }
-        } catch (e: Exception) {
-            Log.d(TAG, e.toString())
         }
     }
 
@@ -93,11 +95,42 @@ class HistoryFragment : Fragment() {
     private fun setUserPolls(pollItems: List<PollItem>, context: Context) {
         try {
             if (isAdded) {
-                val adapter = PollAdapter(pollItems, context)
+                val adapter =
+                    PollAdapter(pollItems, context, object : PollAdapter.OnDeleteClickListener {
+                        override fun onDeleteClick(pollId: String) {
+                            deletePoll(pollId)
+                        }
+                    })
                 binding.recyclerViewPoll.adapter = adapter
             }
         } catch (e: Exception) {
             Log.d(TAG, e.toString())
+        }
+    }
+
+    private fun deletePoll(pollId: String) {
+        historyViewModel.apply {
+            getToken().observe(viewLifecycleOwner) { token ->
+                getId().observe(viewLifecycleOwner) { userId ->
+                    deletePoll(token!!, userId!!, pollId).observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Result.Loading -> {
+                                showLoading(true)
+                            }
+                            is Result.Success -> {
+                                showLoading(false)
+                                Toast.makeText(requireContext(), "Poll deleted", Toast.LENGTH_SHORT)
+                                    .show()
+                                getPollHistory()
+                            }
+                            is Result.Error -> {
+                                showLoading(false)
+                                Log.d(TAG, "e: ${it.error}")
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -70,4 +70,7 @@
     <string name="poll_history">Poll History</string>
     <string name="title_history">History</string>
     <string name="empty_polls">There is no polls yet</string>
+    <string name="share">Share</string>
+    <string name="visit">Visit</string>
+    <string name="delete">Delete</string>
 </resources>

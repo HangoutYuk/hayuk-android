@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:contentDescription="card_item"
+    android:contentDescription="@string/poll_history"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp">
 
@@ -23,6 +23,7 @@
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/places_photo"
             android:scaleType="centerCrop"
+            tools:ignore="ImageContrastCheck"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/place_name"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_delete"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,23 +81,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_marginTop="8dp"
+                android:text="@string/share"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-                android:text="share"
                 app:icon="@drawable/ic_share"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/item_rating"
-                app:layout_constraintTop_toBottomOf="@+id/item_rating" />
+                app:layout_constraintTop_toBottomOf="@+id/item_rating"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <Button
                 android:id="@+id/btn_visit"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:text="visit"
                 android:layout_marginStart="4dp"
+                android:text="@string/visit"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:icon="@drawable/ic_open_in_browser"
                 app:layout_constraintStart_toEndOf="@+id/btn_share"
-                app:layout_constraintTop_toTopOf="@+id/btn_share" />
+                app:layout_constraintTop_toTopOf="@+id/btn_share"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/btn_delete"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/delete"
+                app:icon="@drawable/ic_delete"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

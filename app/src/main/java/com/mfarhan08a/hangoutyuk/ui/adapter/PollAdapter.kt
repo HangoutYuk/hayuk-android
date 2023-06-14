@@ -12,13 +12,24 @@ import com.mfarhan08a.hangoutyuk.data.model.PollItem
 import com.mfarhan08a.hangoutyuk.databinding.ItemPollBinding
 import com.mfarhan08a.hangoutyuk.util.Formater
 
-class PollAdapter(private val listPoll: List<PollItem>, private val context: Context) :
-    RecyclerView.Adapter<PollAdapter.PlaceViewHolder>() {
+class PollAdapter(
+    private val listPoll: List<PollItem>,
+    private val context: Context,
+    private val onDeleteClickListener: OnDeleteClickListener,
+) : RecyclerView.Adapter<PollAdapter.ViewHolder>() {
 
-    class PlaceViewHolder(private val binding: ItemPollBinding) :
+    interface OnDeleteClickListener {
+        fun onDeleteClick(pollId: String)
+    }
+
+    class ViewHolder(private val binding: ItemPollBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(poll: PollItem, context: Context) {
+        fun bind(
+            poll: PollItem,
+            context: Context,
+            onDeleteClickListener: OnDeleteClickListener
+        ) {
             if (poll.photoUrl != null) {
                 Glide.with(itemView.context)
                     .load(poll.photoUrl)
@@ -43,12 +54,13 @@ class PollAdapter(private val listPoll: List<PollItem>, private val context: Con
 
             }
             binding.btnVisit.setOnClickListener {
-
                 val visitUrl =
                     Uri.parse("https://poll-dot-hayuk-project.et.r.appspot.com/poll/${poll.pollId}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, visitUrl)
                 context.startActivity(mapIntent)
-
+            }
+            binding.btnDelete.setOnClickListener {
+                onDeleteClickListener.onDeleteClick(poll.pollId)
             }
         }
     }
@@ -56,16 +68,16 @@ class PollAdapter(private val listPoll: List<PollItem>, private val context: Con
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): PlaceViewHolder {
+    ): ViewHolder {
         val binding = ItemPollBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PlaceViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(
-        holder: PlaceViewHolder,
+        holder: ViewHolder,
         position: Int
     ) {
-        holder.bind(listPoll[position], context)
+        holder.bind(listPoll[position], context, onDeleteClickListener)
     }
 
     override fun getItemCount(): Int = listPoll.size

@@ -9,4 +9,7 @@ class HistoryViewModel(private val repository: AppRepository) : ViewModel() {
     fun getToken() = repository.getToken().asLiveData(Dispatchers.IO)
     fun getId() = repository.getId().asLiveData(Dispatchers.IO)
     fun getPollsUser(token: String, id: String) = repository.getPollsUser(token, id)
+
+    fun deletePoll(token: String, userId: String, pollId: String) =
+        repository.deletePoll(token, userId, pollId)
 }

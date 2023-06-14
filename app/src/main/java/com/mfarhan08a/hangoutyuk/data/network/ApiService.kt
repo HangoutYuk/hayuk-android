@@ -44,11 +44,20 @@ interface ApiService {
         @Path("id") id: String,
     ): UserResponse
 
+
     @GET("user/{id}/polls")
     suspend fun getPollsUser(
         @Header("auth-token") token: String,
         @Path("id") id: String,
     ): PollResponse
+
+    @Headers("Content-Type: application/json")
+    @HTTP(method = "DELETE", path = "user/{id}/polls", hasBody = true)
+    suspend fun deletePoll(
+        @Header("auth-token") token: String,
+        @Path("id") id: String,
+        @Body request: DeletePollRequest
+        ): UpdateResponse
 
     @Multipart
     @POST("user/{id}")

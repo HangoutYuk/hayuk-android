@@ -241,6 +241,26 @@ class AppRepository(
         }
     }
 
+    fun deletePoll(
+        token: String,
+        userId: String,
+        pollId: String,
+    ): LiveData<Result<UpdateResponse>> = liveData(Dispatchers.IO) {
+        emit(Result.Loading)
+        try {
+            val paramObject = JSONObject()
+            paramObject.put("pollId", pollId)
+            val poll = DeletePollRequest(pollId)
+
+            val response = apiService.deletePoll(token, userId, poll)
+            emit(Result.Success(response))
+            Log.d(TAG, response.toString())
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+            Log.d(TAG, e.toString())
+        }
+    }
+
     suspend fun addToFavorite(place: Place) {
         val favoritePlace = FavoriteEntity(
             id = place.id!!,
