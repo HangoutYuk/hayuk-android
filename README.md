@@ -5,6 +5,13 @@ HangoutYuk! (or HaYuk!) is the solution to easily planning hangout events with y
 
 ## Feature
 
+- Get place recommendations from user location
+- Get place recommendations from chosen location
+- Favorite Place
+- Map view
+- Update Profile
+- Create Poll
+- Poll History
 
 ## Download
 
@@ -27,12 +34,20 @@ Download the android app from our [Releases](https://github.com/HangoutYuk/hayuk
 
 ## Tools
 
-- Android Studio Electric Eel
+- Whimsical
 - Figma
+- Android Studio Electric Eel
 
 ## Api Endopoint Lists
 
 [HangoutYuk! Endpoint](https://dev-dot-hayuk-project.et.r.appspot.com/api-docs). The detail of this endpoint is in our [HangoutYuk! API](https://github.com/HangoutYuk/hayuk-api) repository from our cloud computing teams.
+
+## Resource Related
+
+- [Wireframe with whimsical](https://whimsical.com/hangoutyuk-T8iyCfU7y2bA51XAzPQdDs)
+- [Hi-Fi with Figma](https://www.figma.com/file/Im8O2UZAGTOx0QIGF5RDZU/HangoutYuk!?type=design&node-id=213%3A3258&t=OwQgFrMvDbvIq9h1-1)
+- [Prototype](https://www.figma.com/proto/Im8O2UZAGTOx0QIGF5RDZU/HangoutYuk!?type=design&node-id=213-3259&scaling=scale-down&page-id=213%3A3258&starting-point-node-id=213%3A3259)
+
 
 ## Our Team
 
