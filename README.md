@@ -27,8 +27,11 @@ Download the android app from our [Releases](https://github.com/HangoutYuk/hayuk
 
 ## Tools
 
+- Android Studio Electric Eel
+- Figma
 
 ## Api Endopoint Lists
+
 [HangoutYuk! Endpoint](https://dev-dot-hayuk-project.et.r.appspot.com/api-docs). The detail of this endpoint is in our [HangoutYuk! API](https://github.com/HangoutYuk/hayuk-api) repository from our cloud computing teams.
 
 ## Our Team
