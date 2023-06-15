@@ -15,9 +15,9 @@ HangoutYuk! (or HaYuk!) is the solution to easily planning hangout events with y
 
 ## Screenshots
 
-<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201126.png" width="200" /> <img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201212.png" width="200" />
-<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201306.png" width="200" /><img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201406.png" width="200" />
-<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201514.png" width="200" /><img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201645.png" width="200" />
+<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201126.png" width="200" /><img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201212.png" width="200" /><img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201306.png" width="200" />
+
+<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201406.png" width="200" /><img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201514.png" width="200" /><img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201645.png" width="200" />
 
 ## Demo Video
 
