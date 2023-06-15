@@ -13,6 +13,19 @@ HangoutYuk! (or HaYuk!) is the solution to easily planning hangout events with y
 - Create Poll
 - Poll History
 
+## Screenshots
+
+<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201126.png" width="200" />
+<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201212.png" width="200" />
+<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201306.png" width="200" />
+<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201406.png" width="200" />
+<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201514.png" width="200" />
+<img src="https://github.com/HangoutYuk/.github/blob/main/assets/Screenshot%202023-06-15%20201645.png" width="200" />
+
+## Demo Video
+
+[HangoutYuk! App Demo Video](https://drive.google.com/file/d/1Fac03v7efKOQKzBODsAOu5IBW-kXrFpt/view?usp=sharing)
+
 ## Download
 
 Download the android app from our [Releases](https://github.com/HangoutYuk/hayuk-android/releases/tag/1.0) 
